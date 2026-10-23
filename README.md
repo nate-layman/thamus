@@ -117,6 +117,8 @@ python3 scripts/serve.py
 
 Then open http://localhost:4173 and paste a key, or pass it once as `?key=...`. The script serves `docs/` and proxies `/v1/*` to MindRouter, because the public proxy allows only the published origins; a plain static server works for everything except the model calls.
 
+**The proxy's allowlist.** Browser calls to the lakehouse proxy succeed only from origins its Caddy config names. If the live page says "Could not reach MindRouter (Load failed)", the origin is missing: `deploy/caddy-cors.snippet` is the change to make on the host, and it names this site's origin alongside Promptulus and Carl's.
+
 **The vector database** is built, not hand-written. `scripts/fetch_corpus.py` fetches the current 2 CFR 200 from the eCFR and cuts it into passages, one per lettered paragraph or defined term, each with its pinpoint citation and a link; `scripts/embed_corpus.mjs` embeds them with all-MiniLM-L6-v2 through transformers.js and writes `docs/index/`. The page loads the same model in the browser (about 23 MB once, then cached) so that query vectors and passage vectors agree. To rebuild after the regulation changes:
 
 ```bash

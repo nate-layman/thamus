@@ -1,0 +1,48 @@
+# CORS for the GitHub Pages sites that call MindRouter through this host from
+# the browser: Promptulus (https://ai4ra.github.io), Data Crawler Carl and the
+# NCURA workshop site (https://ui-insight.github.io), and Remembering Thamus
+# (https://nate-layman.github.io). As of 2026-10-23 the host answers every
+# origin with a fixed "Access-Control-Allow-Origin: https://ai4ra.github.io",
+# so a page on any other origin fails with "Load failed" on its first model call.
+#
+# Caddy's `header` directive takes one static value, so the way to allow several
+# origins is a matcher on the Origin header and an echo of it back. In
+# /etc/caddy/Caddyfile on nlayman-external, inside the site block, put the
+# preflight handler ABOVE the existing `handle @api` block (handle blocks are
+# evaluated in order, and the preflight must be answered before the proxy sees
+# it), and replace the Promptulus-only header lines inside `handle @api` with the
+# two `header @pages_origin` lines. Then: sudo systemctl reload caddy
+#
+# Check from a laptop; the header should echo whichever origin you send:
+#   curl -sI -X OPTIONS -H "Origin: https://nate-layman.github.io" \
+#     -H "Access-Control-Request-Method: POST" \
+#     https://nlayman-external.insight.uidaho.edu/v1/chat/completions | grep -i access-control
+
+@pages_origin {
+    header Origin https://ai4ra.github.io
+    header Origin https://ui-insight.github.io
+    header Origin https://nate-layman.github.io
+}
+@pages_preflight {
+    method OPTIONS
+    path /v1/*
+    header Origin https://ai4ra.github.io
+    header Origin https://ui-insight.github.io
+    header Origin https://nate-layman.github.io
+}
+handle @pages_preflight {
+    header Access-Control-Allow-Origin "{http.request.header.Origin}"
+    header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    header Access-Control-Allow-Headers "Authorization, Content-Type"
+    header Access-Control-Max-Age "600"
+    header Vary "Origin"
+    respond 204
+}
+
+# Inside the existing `handle @api { ... }` block, before `reverse_proxy`:
+#
+#     header @pages_origin >Access-Control-Allow-Origin "{http.request.header.Origin}"
+#     header @pages_origin >Vary "Origin"
+#
+# The `>` defers the header until the proxied response is written, so the
+# 401 for a bad key carries it too and the page can show MindRouter's message.
