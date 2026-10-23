@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f1b300" />
+    <title>Remembering Thamus</title>
+    <meta name="description" content="Ask a research compliance question five ways, one at a time: from the model's memory, from text you paste, from a web search, from a vector database of 2 CFR 200, and from a live eCFR lookup over MCP. Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down." />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="index.html" class="app-title-link"><h1><span>Remembering</span> Thamus</h1></a>
+      <span class="app-subtitle">One question. Five ways to answer it, one at a time.</span>
+      <div class="app-header-actions">
+        <button class="about-btn" data-open="paste-modal">Context</button>
+        <button class="about-btn" data-open="story-modal">The story</button>
+        <button class="about-btn" data-open="how-modal">How it works</button>
+        <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener" class="about-btn">GitHub</a>
+        <button id="api-key-btn" class="api-key-btn" data-open="key-modal">
+          <span class="api-key-dot" id="api-key-dot"></span>
+          <span id="api-key-label">API key</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-body">
+      <section class="lede">
+        <p class="lede-quote">Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down.</p>
+        <p class="lede-text">A language model&rsquo;s memory is its training: confident, fluent, and frozen on a date. Below, the <em>same model</em> answers the <em>same question</em> five ways, one at a time. Only what it is handed differs. Ask something whose answer changed in the 2024 revision of the Uniform Guidance and watch what each way of reaching for the record gets right.</p>
+      </section>
+
+      <section class="ask">
+        <div class="ask-row">
+          <input id="question" type="text" value="" placeholder="What de minimis indirect cost rate may a recipient without a negotiated rate charge?" autocomplete="off" aria-label="The question" />
+          <select id="method" class="method" title="How the model gets its context" aria-label="Method"></select>
+          <select id="model" title="The model every way asks" aria-label="Model"></select>
+          <button id="ask" class="ask-btn">Ask</button>
+        </div>
+        <div id="presets" class="presets"></div>
+      </section>
+
+      <section id="way" class="way" data-way="memory">
+        <header class="way-head">
+          <span id="way-num" class="way-num">1</span>
+          <div>
+            <h2 id="way-title">Memory</h2>
+            <p id="way-sub" class="way-sub"></p>
+          </div>
+        </header>
+
+        <div id="way-body">
+          <div id="way-extra" class="way-extra"></div>
+          <p id="way-status" class="way-status"></p>
+          <div id="way-answer" class="way-answer is-muted"></div>
+          <section id="way-trail" class="way-trail" hidden>
+            <h3>What the model was handed</h3>
+            <div id="trail-body" class="trail-body"></div>
+          </section>
+          <p id="way-meta" class="way-meta"></p>
+          <dl class="way-tradeoff">
+            <dt class="is-benefit">Biggest benefit</dt><dd id="way-benefit"></dd>
+            <dt class="is-cost">Biggest cost</dt><dd id="way-cost"></dd>
+            <dt class="is-watch">Watch for</dt><dd id="way-watch"></dd>
+          </dl>
+        </div>
+
+        <div id="way-end" class="way-end" hidden>
+          <p class="discussion-q">Which do you trust more: someone who remembers everything, or someone who can look up the answer to anything?</p>
+          <p>Thamus would say the first. Theuth would say the second. You have just watched five arguments, and none of them settles it, because the question is not really about the model. Before you answer, decide what a person has to carry in their own head to tell whether what came back is right, and whether that is the same thing as remembering it.</p>
+          <ul class="end-list">
+            <li>What did the person have to already know to catch the memory answer when it was wrong?</li>
+            <li>What did they have to know to paste the right text, and the right version of it?</li>
+            <li>When the lookup showed its work, who in the room could check it?</li>
+          </ul>
+        </div>
+
+        <div class="way-nav">
+          <button id="prev" type="button" class="nav-btn">&larr; Previous</button>
+          <button id="rerun" type="button" class="link-btn">Run again</button>
+          <button id="next" type="button" class="nav-btn is-primary">Next way &rarr;</button>
+        </div>
+      </section>
+
+      <footer class="app-footer">
+        <p>Nathan Layman and Bert Baumgaertner, University of Idaho. Part of the <a href="https://ai4ra.uidaho.edu" target="_blank" rel="noopener">AI4RA</a> workshops; built for the NCURA Region VI/VII 2026 session <a href="https://ui-insight.github.io/NCURARegionalWorkshop2026/" target="_blank" rel="noopener">Augmenting Research Administration with AI</a>. Code under the <a href="https://github.com/nate-layman/thamus/blob/main/LICENSE" target="_blank" rel="noopener">Apache License 2.0</a>, text under <a href="https://github.com/nate-layman/thamus/blob/main/LICENSE-CONTENT.md" target="_blank" rel="noopener">CC BY 4.0</a>; see <a href="https://github.com/nate-layman/thamus/blob/main/NOTICE" target="_blank" rel="noopener">NOTICE</a> for third-party credits.</p>
+        <p>Enter no sponsored project data, PII, or restricted information. The only thing this page is built to read is public regulation.</p>
+      </footer>
+    </main>
+
+    <div id="toast" class="toast" role="status"></div>
+
+    <!-- Context window for the pasted-text way -->
+    <div id="paste-modal" class="modal-overlay">
+      <div class="modal-dialog modal-wide">
+        <h2>Context</h2>
+        <p>Whatever is in this box is handed to the model in the <strong>Pasted context</strong> way, and nothing else is. Paste a passage from ecfr.gov, a sponsor&rsquo;s policy page, an award letter. The two fill buttons fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023.</p>
+        <textarea id="paste-text" rows="12" placeholder="Paste a passage here."></textarea>
+        <div class="paste-tools">
+          <button id="paste-fill-current" type="button" class="link-btn">Fill with today&rsquo;s 200.414(f)</button>
+          <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
+          <button id="paste-clear" type="button" class="link-btn">Clear</button>
+        </div>
+        <button id="paste-done" class="modal-close-btn">Use this</button>
+      </div>
+    </div>
+
+    <!-- Key modal -->
+    <div id="key-modal" class="modal-overlay">
+      <div class="modal-dialog">
+        <h2>Workshop key</h2>
+        <p>The ways ask a language model, and that needs a key. In the workshop, scan the QR code or open the short link and the key is loaded for you. Otherwise paste one here.</p>
+        <div class="api-key-input-section">
+          <div class="api-key-row">
+            <input type="password" id="api-key-input" placeholder="mr2_… for MindRouter, or a Gemini key" />
+            <button id="api-key-save" class="ask-btn">Save</button>
+            <button id="api-key-clear" class="link-btn">Forget</button>
+          </div>
+          <div class="api-key-status" id="api-key-status"></div>
+        </div>
+        <details class="fine">
+          <summary>How the key is handled</summary>
+          <ul>
+            <li><strong>Tab-scoped.</strong> The key is held in sessionStorage, which belongs to this browser tab. It clears when the tab closes and is never written to disk.</li>
+            <li><strong>Static site.</strong> This page is served as files from GitHub Pages. No server here stores or sees your key.</li>
+            <li><strong>Sent only to the model&rsquo;s gateway.</strong> A key starting with <code>mr2_</code> goes to the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy. Any other key is treated as a Google Gemini key and goes to Google. The eCFR lookup, the web search and the vector database need no key at all.</li>
+            <li><strong>URL stripped.</strong> A key that arrives as <code>?key=</code> is read once and removed from the address bar.</li>
+            <li><strong>Facilitators:</strong> pre-fill by sharing a link to this page with <code>?key=YOUR_KEY</code> appended. Mint a workshop key and revoke it afterward.</li>
+          </ul>
+        </details>
+        <button class="modal-close-btn" data-close="key-modal">Done</button>
+      </div>
+    </div>
+
+    <!-- The story -->
+    <div id="story-modal" class="modal-overlay">
+      <div class="modal-dialog modal-wide">
+        <h2>The story</h2>
+        <p>In Plato&rsquo;s <em>Phaedrus</em>, Socrates tells a story about an Egyptian god named Theuth, the inventor of number, geometry, astronomy, and letters. Theuth brings his inventions to Thamus, the king, and argues for each one. When he comes to writing he makes his strongest claim:</p>
+        <blockquote>This will make the Egyptians wiser and give them better memories; it is a specific both for the memory and for the wit.</blockquote>
+        <p>Thamus is not persuaded. The inventor of a thing, he says, is not the best judge of what it will do to the people who use it. Then he delivers the verdict that has followed writing ever since:</p>
+        <blockquote>This discovery of yours will create forgetfulness in the learners&rsquo; souls, because they will not use their memories; they will trust to the external written characters and not remember of themselves. The specific which you have discovered is an aid not to memory, but to reminiscence, and you give your disciples not truth, but only the semblance of truth; they will be hearers of many things and will have learned nothing; they will appear to be omniscient and will generally know nothing; they will be tiresome company, having the show of wisdom without the reality.</blockquote>
+        <p class="cite">Plato, <em>Phaedrus</em> 274c to 275b, in Benjamin Jowett&rsquo;s translation.</p>
+        <h3>The paradox</h3>
+        <p>Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down. Socrates, who tells the story, wrote nothing. So the dialogue does to Socrates what Plato does to Thamus: a warning against the written record, preserved for twenty-four centuries by nothing but the written record.</p>
+        <p>The same tension runs through every tool that lets us reach for stored information instead of holding it ourselves: writing, then libraries, then search engines, and now language models. The costs Thamus named are real. So are the benefits he dismissed. The question is never whether to reach for the record. It is who should reach for it, when, and what they must still carry in their own head to judge what comes back.</p>
+        <h3>What it means for a machine</h3>
+        <p>Thamus assumed that memory was the reliable thing and the record was the threat. For a language model it is backwards. Its memory is an enormous, averaged, frozen impression of everything it read, up to a date after which it read nothing. Ask it for the de minimis indirect cost rate and it will tell you ten percent, because that was the rule in most of what it read, and it will not tell you that the rule changed to fifteen percent on October 1, 2024. It is Thamus&rsquo;s learner exactly: a hearer of many things, appearing omniscient, generally knowing nothing about today.</p>
+        <p>The remedy is the one Thamus refused. Give the model the written record and let it be reminded. For a machine, Thamus&rsquo;s flaw is the feature: a model that is reminded is a model that can be checked.</p>
+        <p class="cite">The full essay, with sources, is in the <a href="https://github.com/nate-layman/thamus#readme" target="_blank" rel="noopener">README</a>.</p>
+        <button class="modal-close-btn" data-close="story-modal">Close</button>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div id="how-modal" class="modal-overlay">
+      <div class="modal-dialog modal-wide">
+        <h2>How it works</h2>
+        <p>This is a static page on GitHub Pages. There is no server of its own. Each way runs in your browser and calls out only for what it says it calls out for. Every way asks the same model, at temperature 0, with one system prompt and one message; open <em>What the model was handed</em> under any answer to see exactly that.</p>
+        <ol class="how-list">
+          <li><strong>Memory.</strong> The question alone. The model answers from training.</li>
+          <li><strong>Pasted text.</strong> Whatever you put in the box, and nothing else. This is the oldest form of context: the person does the reading and hands the model the page. It is also how most people actually use a chat window. The two fill buttons fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023, so you can see the model answer faithfully from either.</li>
+          <li><strong>Web search.</strong> The question, as typed, goes to a SearXNG metasearch on the AI4RA MCP server (Google, Bing, DuckDuckGo, Brave and others merged). The model gets eight titles, addresses and snippets. No page is read in full.</li>
+          <li><strong>Vector database.</strong> A build script cut 2 CFR 200 into 1,103 passages, one per paragraph or defined term, and embedded them with a small sentence-embedding model (all-MiniLM-L6-v2). Your browser loads the same model once (about 23 MB, then cached), embeds the question, ranks every passage by cosine similarity, and hands the top four to the model. This is retrieval-augmented generation as most products do it, and the index is as current as the day it was built.</li>
+          <li><strong>Live eCFR lookup.</strong> The model turns the question into two or three search words. The AI4RA MCP server&rsquo;s eCFR tools search 2 CFR 200, fetch the top section, and when the section is long, the model picks the one paragraph to read. The model answers from that paragraph, with a pinpoint citation and the date of the text in force. It changes when the regulation changes, not when the model does.</li>
+        </ol>
+        <h3>Ways not on this page</h3>
+        <ul class="how-list">
+          <li><strong>Structured data over SQL.</strong> When the record is a table rather than prose, the model should write the query and let a database compute the answer. <a href="https://ui-insight.github.io/data-crawler-carl/" target="_blank" rel="noopener">Data Crawler Carl</a> does that for any CSV, in the browser, and is the sixth way in the workshop.</li>
+          <li><strong>Files in reach of a local agent.</strong> Tools that run on your own machine, such as Claude Code, Cursor or Copilot, let you name a file with <code>@path/to/file</code> and the agent reads it into context. Same idea as the paste box, with the reading done for you, and the same obligation: you still have to know whether that file is the governing one.</li>
+          <li><strong>Long context.</strong> Paste the whole of 2 CFR 200 and ask. It fits in some models&rsquo; windows now, at a cost in time and money per question, and the model still has to find the paragraph.</li>
+        </ul>
+        <h3>What leaves your browser</h3>
+        <ul class="how-list">
+          <li>Your question and the retrieved text go to the model&rsquo;s gateway: the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy with an <code>mr2_</code> key, or Google with a Gemini key.</li>
+          <li>Your question goes to the AI4RA MCP server for the web search and the eCFR lookup. The server keeps no keys and logs none.</li>
+          <li>Nothing leaves for the vector database step. The embedding runs in your browser.</li>
+        </ul>
+        <p>Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>. The MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>.</p>
+        <button class="modal-close-btn" data-close="how-modal">Close</button>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

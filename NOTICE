@@ -1,0 +1,66 @@
+Remembering Thamus
+Copyright 2026 Nathan Layman and Bert Baumgaertner
+
+Authors: Nathan Layman and Bert Baumgaertner, University of Idaho
+https://github.com/nate-layman/thamus
+
+Remembering Thamus is a project of AI4RA at the University of Idaho.
+https://github.com/AI4RA
+
+This material is based upon work supported by the U.S. National Science
+Foundation under the GRANTED program, award number 2427549, "Crossing the
+Innovation Valley of Death: Democratizing Data and Artificial Intelligence
+for Research Administration." Any opinions, findings, conclusions or
+recommendations expressed in this material are those of the authors and do
+not necessarily reflect the views of the National Science Foundation.
+
+The source code is licensed under the Apache License, Version 2.0 (see
+LICENSE). The teaching content (the essay, the story, the notes and the
+discussion) is licensed under the Creative Commons Attribution 4.0
+International License (see LICENSE-CONTENT.md).
+
+This file is an attribution notice under Section 4(d) of the Apache
+License, Version 2.0. Any redistribution of this work, or of a derivative
+work, must include a readable copy of the attribution notices above, crediting
+all of the following: Nathan Layman and Bert Baumgaertner as the authors, the
+University of Idaho, the AI4RA project, and National Science Foundation
+award 2427549.
+
+------------------------------------------------------------------------
+Sources and third-party software
+
+The page's shell (header, key handling, modals) and the LLM bridge are
+adapted from Data Crawler Carl (ui-insight/data-crawler-carl) and
+Promptulus (AI4RA/promptulus), both by the same authors under Apache-2.0.
+The eCFR lookup is adapted from the NCURA Region VI/VII 2026 workshop site
+(ui-insight/NCURARegionalWorkshop2026), Apache-2.0.
+
+docs/index/ holds passages of 2 CFR Part 200 fetched from the eCFR
+(https://www.ecfr.gov), a work of the United States Government in the
+public domain, with vectors computed from them.
+
+The site loads the following open source software in the browser from
+public CDNs. Each remains under its own license and copyright; none is
+modified or redistributed by this project.
+
+Transformers.js, @huggingface/transformers 4.3.1 (sentence embeddings in the browser)
+  Copyright 2023-present Hugging Face
+  Apache License 2.0 - https://github.com/huggingface/transformers.js/blob/main/LICENSE
+  It loads ONNX Runtime Web (MIT, Microsoft) as part of its bundle.
+
+all-MiniLM-L6-v2, as Xenova/all-MiniLM-L6-v2 (the embedding model, fetched
+from the Hugging Face Hub at run time and at build time)
+  Copyright the Sentence-Transformers authors (Nils Reimers and Iryna Gurevych)
+  Apache License 2.0 - https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+
+@google/genai (Google Gen AI JavaScript SDK, loaded only when a Gemini key is used)
+  Copyright 2025 Google LLC
+  Apache License 2.0 - https://github.com/googleapis/js-genai/blob/main/LICENSE
+
+The live columns call the AI4RA MCP server (ui-insight/ai4ra-mcp,
+Apache-2.0), whose eCFR tools read https://www.ecfr.gov and whose web
+search is a SearXNG metasearch (AGPL-3.0, run as a service, not
+redistributed here).
+
+The text of Plato's Phaedrus is quoted in Benjamin Jowett's 1892
+translation, which is in the public domain.

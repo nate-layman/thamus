@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Remembering Thamus"
+type: software
+date-released: 2026-10-23
+license: Apache-2.0
+repository-code: "https://github.com/nate-layman/thamus"
+url: "https://nate-layman.github.io/thamus/"
+authors:
+  - family-names: Layman
+    given-names: Nathan
+    affiliation: "University of Idaho"
+  - family-names: Baumgaertner
+    given-names: Bert
+    affiliation: "University of Idaho"
+abstract: >-
+  Ask a research compliance question five ways in the browser: from a language model's memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from a live eCFR lookup over MCP. A teaching page on what a model remembers and what it must look up, built for the AI4RA workshops.
