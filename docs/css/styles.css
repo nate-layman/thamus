@@ -247,7 +247,7 @@ a { color: inherit; }
 }
 .link-btn:hover { color: var(--ink); }
 
-.paste-box { display: flex; flex-direction: column; gap: 0.5rem; }
+.paste-line { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; font-size: 0.95rem; color: #333; }
 #paste-text {
   width: 100%;
   padding: 0.6rem 0.7rem;
@@ -260,7 +260,7 @@ a { color: inherit; }
   outline: none;
 }
 #paste-text:focus { border-color: var(--gold); }
-.paste-tools { display: flex; gap: 0.9rem; flex-wrap: wrap; align-items: center; }
+.paste-tools { display: flex; gap: 0.9rem; flex-wrap: wrap; align-items: center; margin-top: 0.5rem; }
 
 .app-footer { max-width: 56rem; margin: 2rem auto 0; font-size: 0.8rem; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 0.4rem; }
 .app-footer a { color: #7a5a00; font-weight: 600; }
@@ -292,7 +292,7 @@ a { color: inherit; }
   line-height: 1.6;
   font-size: 0.95rem;
 }
-.modal-dialog.modal-wide { max-width: 760px; }
+.modal-dialog.modal-wide { max-width: 860px; }
 .modal-dialog h2 { margin: 0 0 0.8rem; font-size: 1.3rem; }
 .modal-dialog h3 { margin: 1.2rem 0 0.4rem; font-size: 1rem; }
 .modal-dialog p { margin: 0 0 0.7rem; }
@@ -321,3 +321,19 @@ a { color: inherit; }
   .app-subtitle { display: none; }
   .modal-dialog { padding: 1.4rem 1.2rem; }
 }
+
+/* ── How it works: pictures first ── */
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; margin: 1rem 0 1.2rem; }
+.how-card { margin: 0; background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+.how-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #ddd; }
+.how-card figcaption { padding: 0.7rem 0.8rem 0.8rem; font-size: 0.88rem; line-height: 1.45; display: flex; flex-direction: column; gap: 0.35rem; }
+.how-card h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 0.45rem; }
+.how-num { flex: none; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--ink); color: var(--gold); font-size: 0.78rem; font-weight: 800; display: grid; place-items: center; }
+.how-card figcaption > p { margin: 0; color: #333; }
+.how-card details { font-size: 0.82rem; color: #444; }
+.how-card details summary { cursor: pointer; color: #7a5a00; font-weight: 700; }
+.how-card details p { margin: 0.3rem 0 0; }
+.how-more { margin: 0 0 0.6rem; }
+.how-more > summary { cursor: pointer; font-weight: 700; color: #7a5a00; }
+.how-more .how-list { margin-top: 0.5rem; }
+.how-credits { font-size: 0.82rem; color: #555; }

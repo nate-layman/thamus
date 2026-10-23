@@ -154,6 +154,11 @@ function render(w) {
   $('way-cost').textContent = w.cost;
   $('way-watch').textContent = w.watch;
   $('paste-box').hidden = w.id !== 'paste';
+  if (w.id === 'paste') {
+    const n = pastedText().length;
+    $('paste-summary').textContent = n ? `${n.toLocaleString()} characters pasted.` : 'Nothing pasted yet.';
+    $('paste-open').textContent = n ? 'Edit' : 'Paste context';
+  }
   const st = state[w.id];
   $('way-status').textContent = st.status;
   panel.classList.toggle('is-busy', !!st.status);
@@ -245,8 +250,9 @@ async function fillPaste(date) {
 }
 
 function askWithPaste() {
-  if (!question) { ask(); return; }
+  closeModal('paste-modal');
   state.paste.ran = false;
+  if (!question) { ask(); return; }
   show(WAYS.findIndex(w => w.id === 'paste'), true);
 }
 
@@ -275,7 +281,7 @@ async function runMemory(question) {
 async function runPaste(question) {
   const pasted = pastedText();
   if (!pasted) {
-    setAnswer('paste', 'Nothing pasted. Put a passage in the box above and ask with it.', 'muted');
+    setAnswer('paste', 'Nothing pasted. Add a passage and ask with it.', 'muted');
     setTrail('paste', el('p', { class: 'trail-note', text: 'Nothing. This way only works when you have done the reading.' }));
     return;
   }

@@ -11,7 +11,6 @@
   <body>
     <header class="app-header">
       <a href="index.html" class="app-title-link"><h1><span>Remembering</span> Thamus</h1></a>
-      <span class="app-subtitle">One question. Five ways to answer it, one at a time.</span>
       <div class="app-header-actions">
         <button class="about-btn" data-open="story-modal">The story</button>
         <button class="about-btn" data-open="how-modal">How it works</button>
@@ -49,14 +48,9 @@
         </header>
 
         <div id="way-body">
-          <div id="paste-box" class="paste-box" hidden>
-            <textarea id="paste-text" rows="7" placeholder="Paste a passage here: from ecfr.gov, a sponsor’s policy page, an award letter. The model gets this and nothing else."></textarea>
-            <div class="paste-tools">
-              <button id="paste-run" type="button" class="ask-btn small">Ask with this text</button>
-              <button id="paste-fill-current" type="button" class="link-btn">Fill with today’s 200.414(f)</button>
-              <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
-              <button id="paste-clear" type="button" class="link-btn">Clear</button>
-            </div>
+          <div id="paste-box" class="paste-line" hidden>
+            <span id="paste-summary">Nothing pasted yet.</span>
+            <button id="paste-open" type="button" class="ask-btn small" data-open="paste-modal">Paste context</button>
           </div>
           <p id="way-status" class="way-status"></p>
           <div id="way-answer" class="way-answer is-muted"></div>
@@ -95,6 +89,21 @@
     </main>
 
     <div id="toast" class="toast" role="status"></div>
+
+    <!-- Pasted context -->
+    <div id="paste-modal" class="modal-overlay">
+      <div class="modal-dialog modal-wide">
+        <h2>Pasted context</h2>
+        <p>The model gets this and nothing else. Paste a passage from ecfr.gov, a sponsor&rsquo;s policy page, an award letter.</p>
+        <textarea id="paste-text" rows="12" placeholder="Paste a passage here."></textarea>
+        <div class="paste-tools">
+          <button id="paste-fill-current" type="button" class="link-btn">Fill with today&rsquo;s 200.414(f)</button>
+          <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
+          <button id="paste-clear" type="button" class="link-btn">Clear</button>
+        </div>
+        <button id="paste-run" class="modal-close-btn">Ask with this text</button>
+      </div>
+    </div>
 
     <!-- Key modal -->
     <div id="key-modal" class="modal-overlay">
@@ -147,27 +156,78 @@
     <div id="how-modal" class="modal-overlay">
       <div class="modal-dialog modal-wide">
         <h2>How it works</h2>
-        <p>This is a static page on GitHub Pages. There is no server of its own. Each way runs in your browser and calls out only for what it says it calls out for. Every way asks the same model, at temperature 0, with one system prompt and one message; open <em>What the model was handed</em> under any answer to see exactly that.</p>
-        <ol class="how-list">
-          <li><strong>Memory.</strong> The question alone. The model answers from training.</li>
-          <li><strong>Pasted text.</strong> Whatever you put in the box, and nothing else. This is the oldest form of context: the person does the reading and hands the model the page. It is also how most people actually use a chat window. The two fill links fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023, so you can see the model answer faithfully from either.</li>
-          <li><strong>Web search.</strong> The question, as typed, goes to a SearXNG metasearch on the AI4RA MCP server (Google, Bing, DuckDuckGo, Brave and others merged). The model gets eight titles, addresses and snippets. No page is read in full.</li>
-          <li><strong>Vector database.</strong> A build script cut 2 CFR 200 into 1,103 passages, one per paragraph or defined term, and embedded them with a small sentence-embedding model (all-MiniLM-L6-v2). Your browser loads the same model once (about 23 MB, then cached), embeds the question, ranks every passage by cosine similarity, and hands the top four to the model. This is retrieval-augmented generation as most products do it, and the index is as current as the day it was built.</li>
-          <li><strong>Live eCFR lookup.</strong> The model turns the question into two or three search words. The AI4RA MCP server&rsquo;s eCFR tools search 2 CFR 200, fetch the top section, and when the section is long, the model picks the one paragraph to read. The model answers from that paragraph, with a pinpoint citation and the date of the text in force. It changes when the regulation changes, not when the model does.</li>
-        </ol>
-        <h3>Ways not on this page</h3>
-        <ul class="how-list">
-          <li><strong>Structured data over SQL.</strong> When the record is a table rather than prose, the model should write the query and let a database compute the answer. <a href="https://ui-insight.github.io/data-crawler-carl/" target="_blank" rel="noopener">Data Crawler Carl</a> does that for any CSV, in the browser, and is the sixth way in the workshop.</li>
-          <li><strong>Files in reach of a local agent.</strong> Tools that run on your own machine, such as Claude Code, Cursor or Copilot, let you name a file with <code>@path/to/file</code> and the agent reads it into context. Same idea as the paste box, with the reading done for you, and the same obligation: you still have to know whether that file is the governing one.</li>
-          <li><strong>Long context.</strong> Paste the whole of 2 CFR 200 and ask. It fits in some models&rsquo; windows now, at a cost in time and money per question, and the model still has to find the paragraph.</li>
-        </ul>
-        <h3>What leaves your browser</h3>
-        <ul class="how-list">
-          <li>Your question and the retrieved text go to the model&rsquo;s gateway: the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy with an <code>mr2_</code> key, or Google with a Gemini key.</li>
-          <li>Your question goes to the AI4RA MCP server for the web search and the eCFR lookup. The server keeps no keys and logs none.</li>
-          <li>Nothing leaves for the vector database step. The embedding runs in your browser.</li>
-        </ul>
-        <p>Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>. The MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>.</p>
+        <p>Same model, same question, temperature 0, one system prompt. The only thing that changes is what the model is handed. Under every answer, <em>What the model was handed</em> shows exactly that.</p>
+
+        <div class="how-grid">
+          <figure class="how-card">
+            <img src="img/way-memory.jpg" alt="The Seated Scribe, a painted limestone statue in the Louvre" loading="lazy" />
+            <figcaption>
+              <h3><span class="how-num">1</span>No context</h3>
+              <p>The scribe recites what he carries. Nothing is looked up.</p>
+              <details><summary>More</summary><p>The question alone goes to the model, and it answers from training: an averaged, frozen impression of everything it read, up to a date after which it read nothing. Fast and fluent, and unable to know what changed after that date.</p></details>
+            </figcaption>
+          </figure>
+          <figure class="how-card">
+            <img src="img/way-paste.jpg" alt="A sheet of the Papyrus of Ani, hieroglyphs and painted figures" loading="lazy" />
+            <figcaption>
+              <h3><span class="how-num">2</span>Pasted context</h3>
+              <p>You bring the scroll. The model reads what you hand it, and only that.</p>
+              <details><summary>More</summary><p>Whatever you paste is the whole of what the model sees. This is the oldest form of context and the way most people actually use a chat window. The two fill links fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023, so you can watch the model answer faithfully from either. The person who did the reading is the one who has to know which version they read.</p></details>
+            </figcaption>
+          </figure>
+          <figure class="how-card">
+            <img src="img/way-web.jpg" alt="A fisherman throwing a cast net over the sea" loading="lazy" />
+            <figcaption>
+              <h3><span class="how-num">3</span>Web search</h3>
+              <p>Cast a wide net. Whatever the sea returns: snippets from anyone, any year.</p>
+              <details><summary>More</summary><p>The question, as typed, goes to a SearXNG metasearch on the AI4RA MCP server (Google, Bing, DuckDuckGo, Brave and others merged). The model gets eight titles, addresses and snippets, and no page is read in full. It usually lands on the right figure; open the trail to see what it had to wade through.</p></details>
+            </figcaption>
+          </figure>
+          <figure class="how-card">
+            <img src="img/way-ecfr.jpg" alt="A volume of the Code of Federal Regulations and an issue of the Federal Register" loading="lazy" />
+            <figcaption>
+              <h3><span class="how-num">4</span>eCFR lookup</h3>
+              <p>Go to the book itself. Find the section, read the one paragraph, cite it.</p>
+              <details><summary>More</summary><p>The model turns the question into two or three search words. The AI4RA MCP server&rsquo;s eCFR tools search 2 CFR 200, fetch the top section, and when the section is long the model picks the one paragraph to read. The answer comes with a pinpoint citation and the date of the text in force, and it changes when the regulation changes, not when the model does.</p></details>
+            </figcaption>
+          </figure>
+          <figure class="how-card">
+            <img src="img/way-vector.jpg" alt="A library card catalog drawer with one card pulled up" loading="lazy" />
+            <figcaption>
+              <h3><span class="how-num">5</span>Vector database</h3>
+              <p>A card catalog of 2 CFR 200: 1,103 cards, the four nearest pulled.</p>
+              <details><summary>More</summary><p>A build script cut 2 CFR 200 into 1,103 passages, one per paragraph or defined term, and embedded them with a small sentence-embedding model (all-MiniLM-L6-v2). Your browser loads the same model once (about 23 MB, then cached), embeds the question, ranks every passage by cosine similarity, and hands the top four to the model. This is retrieval-augmented generation as most products do it, and the index is as current as the day it was built.</p></details>
+            </figcaption>
+          </figure>
+        </div>
+
+        <details class="how-more">
+          <summary>Ways not on the page</summary>
+          <ul class="how-list">
+            <li><strong>Structured data over SQL.</strong> When the record is a table rather than prose, the model should write the query and let a database compute the answer. <a href="https://ui-insight.github.io/data-crawler-carl/" target="_blank" rel="noopener">Data Crawler Carl</a> does that for any CSV, in the browser, and is the sixth way in the workshop.</li>
+            <li><strong>Files in reach of a local agent.</strong> Tools that run on your own machine, such as Claude Code, Cursor or Copilot, let you name a file with <code>@path/to/file</code> and the agent reads it into context. Same idea as pasting, with the reading done for you, and the same obligation: you still have to know whether that file is the governing one.</li>
+            <li><strong>Long context.</strong> Paste the whole of 2 CFR 200 and ask. It fits in some models&rsquo; windows now, at a cost in time and money per question, and the model still has to find the paragraph.</li>
+          </ul>
+        </details>
+        <details class="how-more">
+          <summary>What leaves your browser</summary>
+          <ul class="how-list">
+            <li>Your question and the retrieved text go to the model&rsquo;s gateway: the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy with an <code>mr2_</code> key, or Google with a Gemini key.</li>
+            <li>Your question goes to the AI4RA MCP server for the web search and the eCFR lookup. The server keeps no keys and logs none.</li>
+            <li>Nothing leaves for the vector database step. The embedding runs in your browser.</li>
+          </ul>
+          <p>This is a static page on GitHub Pages with no server of its own. Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>; the MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>.</p>
+        </details>
+        <details class="how-more">
+          <summary>Picture credits</summary>
+          <ul class="how-list how-credits">
+            <li>The Seated Scribe, Louvre E 3023. Photograph by Shonagon, <a href="https://commons.wikimedia.org/wiki/File:Le_Scribe_accroupi_-_Mus%C3%A9e_du_Louvre_Antiquit%C3%A9s_%C3%A9gyptiennes_E_3023.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC0.</li>
+            <li>Papyrus of Ani, sheet 12, British Museum EA 10470. <a href="https://commons.wikimedia.org/wiki/File:Papyrus_of_Ani_BM_Sheet_12.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, public domain.</li>
+            <li>A fisherman casting a net near Kozhikode Beach. Photograph by Aswin Krishna Poyil, <a href="https://commons.wikimedia.org/wiki/File:A_fisherman_casting_a_net_neat_Kozhikode_Beach.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</li>
+            <li>Code of Federal Regulations and Federal Register, 1987. MassDEP, <a href="https://commons.wikimedia.org/wiki/File:An_example_of_US_Federal_Environmental_Regulations,_1987.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, public domain.</li>
+            <li>Copyright card catalog drawer, Library of Congress. Photograph by Michael Holley, <a href="https://commons.wikimedia.org/wiki/File:Copyright_Card_Catalog_Drawer.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, public domain.</li>
+          </ul>
+        </details>
         <button class="modal-close-btn" data-close="how-modal">Close</button>
       </div>
     </div>
