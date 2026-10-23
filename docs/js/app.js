@@ -137,8 +137,6 @@ function show(i, run) {
   paintSteps();
   render(w);
   $('prev').disabled = current === 0;
-  $('next').textContent = current === WAYS.length - 1 ? 'Done' : (current === WAYS.length - 2 ? 'To end on \u2192' : 'Next way \u2192');
-  $('next').disabled = current === WAYS.length - 1;
   $('rerun').hidden = !!w.discussion;
   if (run && !w.discussion && question && !state[w.id].ran) runWay(w);
 }
@@ -541,7 +539,6 @@ function init() {
   $('method').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
   $('question').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
   $('prev').addEventListener('click', () => show(current - 1, true));
-  $('next').addEventListener('click', () => show(current + 1, true));
   $('rerun').addEventListener('click', () => { state[WAYS[current].id].ran = false; show(current, true); });
   // Arrow keys step through the ways when the focus is not in a text field.
   document.addEventListener('keydown', e => {
