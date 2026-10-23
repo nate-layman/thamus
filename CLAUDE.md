@@ -21,7 +21,8 @@ A static teaching page for the AI4RA workshops at the University of Idaho. One r
 - The query vector and the passage vectors must come from the same model and quantization. Change one, rebuild the other.
 - Never commit a key. The workshop key travels on the QR code's URL and lives in sessionStorage.
 - No em dashes in prose. Use commas, periods, or "and".
-- Sibling repos (data-crawler-carl, promptulus, ai4ra-mcp, NCURARegionalWorkshop2026) are read-only context. If the proxy needs to allow a new origin, raise it in mindrouter-365 or data-lakehouse, not here.
+- Sibling repos (data-crawler-carl, promptulus, ai4ra-mcp, NCURARegionalWorkshop2026) are read-only context.
+- Infrastructure stays out of git. Proxy and host configuration (Caddy snippets, allowlists, anything about the lakehouse VM) goes under `deploy/`, which is ignored, or stays on the host. The README may say what an origin needs, never the config itself.
 
 ## Local preview
 
