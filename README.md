@@ -101,7 +101,7 @@ Good questions to try are the ones whose answers changed in the 2024 revision of
 
 Which do you trust more: someone who remembers everything, or someone who can look up the answer to anything?
 
-Thamus would say the first. Theuth would say the second. The page is five arguments, and none of them settles it, because the question is not really about the model. Before answering, decide what a person has to carry in their own head to tell whether what came back is right, and whether that is the same thing as remembering it. What did the person have to already know to catch the memory answer when it was wrong? What did they have to know to paste the right text, and the right version of it? When the lookup showed its work, who in the room could check it?
+Thamus would say the first. The page is five arguments, and none of them settles it. Before answering, decide what a person has to carry in their own head to tell whether what came back is right. What did the person have to already know to catch the memory answer when it was wrong? What did they have to know to paste the right text, and the right version of it? When the lookup showed its work, who in the room could check it?
 
 ## Running it
 
