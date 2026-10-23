@@ -13,7 +13,6 @@
       <a href="index.html" class="app-title-link"><h1><span>Remembering</span> Thamus</h1></a>
       <span class="app-subtitle">One question. Five ways to answer it, one at a time.</span>
       <div class="app-header-actions">
-        <button class="about-btn" data-open="paste-modal">Context</button>
         <button class="about-btn" data-open="story-modal">The story</button>
         <button class="about-btn" data-open="how-modal">How it works</button>
         <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener" class="about-btn">GitHub</a>
@@ -50,7 +49,15 @@
         </header>
 
         <div id="way-body">
-          <div id="way-extra" class="way-extra"></div>
+          <div id="paste-box" class="paste-box" hidden>
+            <textarea id="paste-text" rows="7" placeholder="Paste a passage here: from ecfr.gov, a sponsor’s policy page, an award letter. The model gets this and nothing else."></textarea>
+            <div class="paste-tools">
+              <button id="paste-run" type="button" class="ask-btn small">Ask with this text</button>
+              <button id="paste-fill-current" type="button" class="link-btn">Fill with today’s 200.414(f)</button>
+              <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
+              <button id="paste-clear" type="button" class="link-btn">Clear</button>
+            </div>
+          </div>
           <p id="way-status" class="way-status"></p>
           <div id="way-answer" class="way-answer is-muted"></div>
           <section id="way-trail" class="way-trail" hidden>
@@ -89,21 +96,6 @@
     </main>
 
     <div id="toast" class="toast" role="status"></div>
-
-    <!-- Context window for the pasted-text way -->
-    <div id="paste-modal" class="modal-overlay">
-      <div class="modal-dialog modal-wide">
-        <h2>Context</h2>
-        <p>Whatever is in this box is handed to the model in the <strong>Pasted context</strong> way, and nothing else is. Paste a passage from ecfr.gov, a sponsor&rsquo;s policy page, an award letter. The two fill buttons fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023.</p>
-        <textarea id="paste-text" rows="12" placeholder="Paste a passage here."></textarea>
-        <div class="paste-tools">
-          <button id="paste-fill-current" type="button" class="link-btn">Fill with today&rsquo;s 200.414(f)</button>
-          <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
-          <button id="paste-clear" type="button" class="link-btn">Clear</button>
-        </div>
-        <button id="paste-done" class="modal-close-btn">Use this</button>
-      </div>
-    </div>
 
     <!-- Key modal -->
     <div id="key-modal" class="modal-overlay">
@@ -159,7 +151,7 @@
         <p>This is a static page on GitHub Pages. There is no server of its own. Each way runs in your browser and calls out only for what it says it calls out for. Every way asks the same model, at temperature 0, with one system prompt and one message; open <em>What the model was handed</em> under any answer to see exactly that.</p>
         <ol class="how-list">
           <li><strong>Memory.</strong> The question alone. The model answers from training.</li>
-          <li><strong>Pasted text.</strong> Whatever you put in the box, and nothing else. This is the oldest form of context: the person does the reading and hands the model the page. It is also how most people actually use a chat window. The two fill buttons fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023, so you can see the model answer faithfully from either.</li>
+          <li><strong>Pasted text.</strong> Whatever you put in the box, and nothing else. This is the oldest form of context: the person does the reading and hands the model the page. It is also how most people actually use a chat window. The two fill links fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023, so you can see the model answer faithfully from either.</li>
           <li><strong>Web search.</strong> The question, as typed, goes to a SearXNG metasearch on the AI4RA MCP server (Google, Bing, DuckDuckGo, Brave and others merged). The model gets eight titles, addresses and snippets. No page is read in full.</li>
           <li><strong>Vector database.</strong> A build script cut 2 CFR 200 into 1,103 passages, one per paragraph or defined term, and embedded them with a small sentence-embedding model (all-MiniLM-L6-v2). Your browser loads the same model once (about 23 MB, then cached), embeds the question, ranks every passage by cosine similarity, and hands the top four to the model. This is retrieval-augmented generation as most products do it, and the index is as current as the day it was built.</li>
           <li><strong>Live eCFR lookup.</strong> The model turns the question into two or three search words. The AI4RA MCP server&rsquo;s eCFR tools search 2 CFR 200, fetch the top section, and when the section is long, the model picks the one paragraph to read. The model answers from that paragraph, with a pinpoint citation and the date of the text in force. It changes when the regulation changes, not when the model does.</li>

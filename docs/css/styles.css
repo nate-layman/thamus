@@ -160,9 +160,6 @@ a { color: inherit; }
 .way-sub { font-size: 1rem; color: var(--muted); margin-top: 0.15rem; }
 #way-body { display: flex; flex-direction: column; gap: 0.9rem; }
 
-.way-extra:empty { display: none; }
-.paste-summary { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; padding: 0.7rem 0.9rem; background: #fafaf8; border: 1px dashed rgba(25, 25, 25, 0.2); border-radius: 8px; font-size: 0.9rem; color: #333; }
-.paste-summary p { flex: 1 1 20rem; }
 .ask-btn.small { padding: 0.4rem 0.9rem; font-size: 0.85rem; }
 
 .way-status { font-size: 0.95rem; color: #7a5a00; font-weight: 600; }
@@ -250,6 +247,7 @@ a { color: inherit; }
 }
 .link-btn:hover { color: var(--ink); }
 
+.paste-box { display: flex; flex-direction: column; gap: 0.5rem; }
 #paste-text {
   width: 100%;
   padding: 0.6rem 0.7rem;
@@ -262,7 +260,7 @@ a { color: inherit; }
   outline: none;
 }
 #paste-text:focus { border-color: var(--gold); }
-.paste-tools { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.paste-tools { display: flex; gap: 0.9rem; flex-wrap: wrap; align-items: center; }
 
 .app-footer { max-width: 56rem; margin: 2rem auto 0; font-size: 0.8rem; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 0.4rem; }
 .app-footer a { color: #7a5a00; font-weight: 600; }

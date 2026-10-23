@@ -63,7 +63,7 @@ The remedy is the one Thamus refused. Give the model the written record and let 
 | | Way | What the model is handed | Biggest benefit | Biggest cost |
 |---|---|---|---|---|
 | 1 | **No context** | The question alone. The model answers from memory. | Instant and free. No infrastructure, no source to keep ready. | Frozen on a date, and it cannot tell you so. |
-| 2 | **Pasted context** | Whatever you put in the context window, and nothing else. You did the reading. | You know exactly what it read. | You have to find the right text, and the right version, yourself. |
+| 2 | **Pasted context** | Whatever you put in the text box, and nothing else. You did the reading. | You know exactly what it read. | You have to find the right text, and the right version, yourself. |
 | 3 | **Web search** | The question goes to a search engine as typed. The model gets eight titles, addresses and snippets, and reads no page in full. | Reaches anything public, including what changed last week. | Anyone's page, any year. The model referees sources it cannot judge. |
 | 4 | **eCFR lookup** | The model turns the question into search words, a Model Context Protocol server searches the eCFR, and the model reads the one paragraph that bears on the question, with a pinpoint citation such as 2 CFR 200.414(f). | Current, cited and checkable to the paragraph. The answer changes when the regulation changes, not when the model does. | Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph. |
 | 5 | **Vector database** | 2 CFR 200 cut into 1,103 passages and embedded. The browser embeds the question with the same model, ranks every passage by cosine similarity, and hands over the nearest four. This is what most products call retrieval-augmented generation. | Fast, cheap and private: the whole corpus searched by meaning, in your browser. | Only as current as the day the index was built, and a near miss looks like a hit. |
@@ -90,7 +90,7 @@ The two columns of that table are the two directions of the workshop. People nee
 Ask the same question each way and look for five things.
 
 - **Confidence does not change.** The model sounds equally sure from memory and from the record. Confidence is not evidence.
-- **The paste is only as good as the paster.** The context window has two fill buttons: the paragraph of 2 CFR 200.414 as it stands today, and as it stood in 2023. Hand the model the 2023 text and it will answer from the 2023 text, politely and wrongly. The person who did the reading is the one who has to know which version they read.
+- **The paste is only as good as the paster.** The text box has two fill links: the paragraph of 2 CFR 200.414 as it stands today, and as it stood in 2023. Hand the model the 2023 text and it will answer from the 2023 text, politely and wrongly. The person who did the reading is the one who has to know which version they read.
 - **Search is wide and shallow.** Snippets come from anyone, in any year, and the model is left to referee. Often it lands on the right figure. Open the trail and see what it had to wade through.
 - **The lookup shows its work.** The search words, the section it read, and the paragraph it answered from are all visible. That trail is what an auditor would ask for, and it is what memory can never provide.
 - **The index is close.** Retrieval over a vector index often lands near the right passage without landing on it, and the answer is a blend of what it found and what it remembered. The similarity scores are right there.

@@ -155,8 +155,7 @@ function render(w) {
   $('way-benefit').textContent = w.benefit;
   $('way-cost').textContent = w.cost;
   $('way-watch').textContent = w.watch;
-  $('way-extra').textContent = '';
-  if (w.id === 'paste') $('way-extra').appendChild(pasteSummary());
+  $('paste-box').hidden = w.id !== 'paste';
   const st = state[w.id];
   $('way-status').textContent = st.status;
   panel.classList.toggle('is-busy', !!st.status);
@@ -217,27 +216,10 @@ async function runWay(w) {
   setMeta(w.id, `${((performance.now() - t0) / 1000).toFixed(1)} s, ${currentModel()}`);
 }
 
-/* ── The context window for the pasted-text way ── */
+/* ── The box for the pasted-context way ── */
 
 function pastedText() {
   return $('paste-text').value.trim();
-}
-
-function pasteSummary() {
-  const text = pastedText();
-  const wrap = el('div', { class: 'paste-summary' });
-  if (!text) {
-    wrap.append(
-      el('p', { text: 'Nothing pasted yet. Open the context window, paste a passage, and run this way.' }),
-      el('button', { type: 'button', class: 'ask-btn small', text: 'Paste context', onclick: () => openModal('paste-modal') })
-    );
-  } else {
-    wrap.append(
-      el('p', {}, [el('strong', { text: `${text.length.toLocaleString()} characters pasted. ` }), clip(text, 160)]),
-      el('button', { type: 'button', class: 'link-btn', text: 'Edit context', onclick: () => openModal('paste-modal') })
-    );
-  }
-  return wrap;
 }
 
 // Fetch 200.414(f) as it stood on a day, or today, into the paste box. Two versions
@@ -264,18 +246,18 @@ async function fillPaste(date) {
   }
 }
 
+function askWithPaste() {
+  if (!question) { ask(); return; }
+  state.paste.ran = false;
+  show(WAYS.findIndex(w => w.id === 'paste'), true);
+}
+
 function wirePaste() {
+  $('paste-run').addEventListener('click', askWithPaste);
+  $('paste-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) askWithPaste(); });
   $('paste-fill-current').addEventListener('click', () => fillPaste(null));
   $('paste-fill-old').addEventListener('click', () => fillPaste('2023-10-01'));
   $('paste-clear').addEventListener('click', () => { $('paste-text').value = ''; });
-  $('paste-done').addEventListener('click', () => {
-    closeModal('paste-modal');
-    state.paste.ran = false;  // new context, so the way runs again when shown
-    if (isCurrent('paste')) {
-      render(WAYS[current]);
-      if (question && pastedText()) runWay(WAYS[current]);
-    }
-  });
 }
 
 /* ── The five runs ── */
@@ -295,7 +277,7 @@ async function runMemory(question) {
 async function runPaste(question) {
   const pasted = pastedText();
   if (!pasted) {
-    setAnswer('paste', 'Nothing pasted. Open the context window, paste a passage, and run this way again.', 'muted');
+    setAnswer('paste', 'Nothing pasted. Put a passage in the box above and ask with it.', 'muted');
     setTrail('paste', el('p', { class: 'trail-note', text: 'Nothing. This way only works when you have done the reading.' }));
     return;
   }
