@@ -154,54 +154,188 @@
 
     <!-- How it works -->
     <div id="how-modal" class="modal-overlay">
-      <div class="modal-dialog modal-wide">
-        <h2>How it works</h2>
-        <p>Same model, same question, temperature 0, one system prompt. The only thing that changes is what the model is handed. Under every answer on the page, <em>What the model was handed</em> shows exactly that.</p>
-
-        <div class="how-rows">
-          <figure class="how-row">
-            <div class="how-tile"><img src="img/crowd-of-amateurs.png" alt="Illustration of a large, diverse crowd of people" loading="lazy" /></div>
-            <figcaption>
-              <h3><span class="how-num">1</span>No context</h3>
-              <p>The model answers from its training alone. Picture a thousand well-read, well-meaning people with no particular expertise. Ask a question and you get back whatever most of them would say, in one confident voice. They have read almost everything ever published and none of your files, they always answer, and the dissenters are averaged away. Nothing is looked up, so the answer cannot know what changed after their reading stopped.</p>
-            </figcaption>
-          </figure>
-          <figure class="how-row">
-            <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 14h10" /><path d="M16 4h2a2 2 0 0 1 2 2v1.344" /><path d="m17 18 4-4-4-4" /><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113" /><rect x="8" y="2" width="8" height="4" rx="1" /></svg></div>
-            <figcaption>
-              <h3><span class="how-num">2</span>Pasted context</h3>
-              <p>You find the passage and paste it. The model is given the question and that text, nothing else, and answers from it. This is the oldest form of context and the way most people actually use a chat window. The model does not know where the text came from or how old it is; you do. The two fill links in the paste box load 2 CFR 200.414(f) as it reads today and as it read in 2023, so you can watch the model answer faithfully from either.</p>
-            </figcaption>
-          </figure>
-          <figure class="how-row">
-            <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></div>
-            <figcaption>
-              <h3><span class="how-num">3</span>Web search</h3>
-              <p>The question, as typed, goes to a search engine: a SearXNG metasearch on the AI4RA MCP server that merges Google, Bing, DuckDuckGo, Brave and others. The model is given the top eight results as titles, addresses and snippets. No page is read in full. It answers from the snippets and names the result it relied on.</p>
-            </figcaption>
-          </figure>
-          <figure class="how-row">
-            <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 18v-7" /><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" /><path d="M14 18v-7" /><path d="M18 18v-7" /><path d="M3 22h18" /><path d="M6 18v-7" /></svg></div>
-            <figcaption>
-              <h3><span class="how-num">4</span>eCFR lookup</h3>
-              <p>A live read of the regulation through the AI4RA MCP server. The model turns the question into two or three search words. The server searches 2 CFR 200 on ecfr.gov and fetches the top section, and when the section is long the model picks the one paragraph to read. The model answers from that paragraph, with a pinpoint citation and the date of the text in force. The answer changes when the regulation changes, not when the model does.</p>
-            </figcaption>
-          </figure>
-          <figure class="how-row">
-            <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></svg></div>
-            <figcaption>
-              <h3><span class="how-num">5</span>Vector database</h3>
-              <p>Retrieval-augmented generation, as most products do it. A build script cut 2 CFR 200 into 1,103 passages and turned each into a vector with a small embedding model (all-MiniLM-L6-v2). In your browser the same model turns the question into a vector, every passage is scored by cosine similarity, and the four nearest are given to the model. Nothing leaves the browser for this step. The index is only as current as the day it was built.</p>
-            </figcaption>
-          </figure>
+      <div class="modal-dialog modal-wide how-dialog">
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+          <defs>
+            <!-- A lifeline oval: navy fill, blue ring, white glyph. Original drawings. -->
+            <symbol id="ll-oval" viewBox="0 0 200 140"><ellipse cx="100" cy="70" rx="90" ry="58" fill="#0a1a3f" stroke="#2f7de1" stroke-width="9"/></symbol>
+            <symbol id="ll-audience" viewBox="0 0 200 140">
+              <use href="#ll-oval"/>
+              <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="62" cy="52" r="12"/><path d="M38 100v-14a24 24 0 0 1 24-24 24 24 0 0 1 24 24"/>
+                <circle cx="138" cy="52" r="12"/><path d="M114 100v-14a24 24 0 0 1 24-24 24 24 0 0 1 24 24"/>
+                <circle cx="100" cy="46" r="14" fill="#0a1a3f"/><path d="M70 106V90a30 30 0 0 1 30-30 30 30 0 0 1 30 30v16z" fill="#0a1a3f"/>
+              </g>
+            </symbol>
+            <symbol id="ll-notes" viewBox="0 0 200 140">
+              <use href="#ll-oval"/>
+              <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M72 30h40l20 20v60H72z"/><path d="M112 30v20h20"/>
+                <path d="M84 70h32M84 84h32M84 98h20"/>
+              </g>
+            </symbol>
+            <symbol id="ll-phone" viewBox="0 0 200 140">
+              <use href="#ll-oval"/>
+              <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M118 34c10 2 16 10 20 20l-10 8c-2 2-5 2-7 0l-4-4c-6 6-12 14-16 22l5 3c2 2 3 5 1 7l-6 12c-10-2-18-10-22-20 6-24 20-40 39-48z"/>
+                <path d="M46 92l10-8-10-8 10-8-10-8 10-8"/>
+              </g>
+            </symbol>
+            <symbol id="ll-expert" viewBox="0 0 200 140">
+              <use href="#ll-oval"/>
+              <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="78" cy="56" r="14"/><path d="M48 108V98a30 30 0 0 1 60 0v10"/>
+                <path d="M108 40h44v28h-26l-10 10V68h-8z"/><path d="M120 54l6 6 12-12"/>
+              </g>
+            </symbol>
+            <symbol id="ll-catalog" viewBox="0 0 200 140">
+              <use href="#ll-oval"/>
+              <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M62 60h76v48H62z"/><path d="M90 60V42h20v18"/><path d="M84 76h32M84 90h22"/>
+                <path d="M54 60h92"/>
+              </g>
+            </symbol>
+          </defs>
+        </svg>
+        <div class="show" id="show">
+          <section class="slide is-active splash">
+            <div class="splash-board">
+              <svg class="logo" viewBox="0 0 800 450" role="img" aria-label="Who wants to know the answer?">
+                <defs>
+                  <radialGradient id="lg-bg" cx="50%" cy="45%" r="70%">
+                    <stop offset="0" stop-color="#2a2a8f"/><stop offset="0.45" stop-color="#1a1060"/><stop offset="1" stop-color="#0a0630"/>
+                  </radialGradient>
+                  <radialGradient id="lg-disc" cx="50%" cy="50%" r="50%">
+                    <stop offset="0" stop-color="#15224f"/><stop offset="1" stop-color="#060b22"/>
+                  </radialGradient>
+                  <linearGradient id="lg-ring" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#2d6fe0"/><stop offset="1" stop-color="#0f2a7a"/>
+                  </linearGradient>
+                  <linearGradient id="lg-gold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#ffe28a"/><stop offset="0.5" stop-color="#e2a800"/><stop offset="1" stop-color="#9c6b00"/>
+                  </linearGradient>
+                  <radialGradient id="lg-flare" cx="50%" cy="50%" r="50%">
+                    <stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="0.3" stop-color="#cfe2ff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                  </radialGradient>
+                  <path id="lg-top" d="M 232 225 A 168 168 0 0 1 568 225"/>
+                  <path id="lg-bottom" d="M 232 225 A 168 168 0 0 0 568 225"/>
+                </defs>
+                <rect width="800" height="450" fill="url(#lg-bg)"/>
+                <g class="logo-rays" opacity="0.25" stroke="#8fb4ff" stroke-width="1">
+                  <path d="M400 225 L0 0 M400 225 L800 0 M400 225 L0 450 M400 225 L800 450 M400 225 L0 225 M400 225 L800 225 M400 225 L400 0 M400 225 L400 450"/>
+                </g>
+                <circle cx="341" cy="87" r="1.6" fill="#fff" opacity="0.35"/><circle cx="84" cy="430" r="0.8" fill="#fff" opacity="0.7"/><circle cx="606" cy="39" r="1" fill="#fff" opacity="0.35"/><circle cx="98" cy="232" r="1.6" fill="#fff" opacity="0.35"/><circle cx="256" cy="56" r="1.6" fill="#fff" opacity="0.35"/><circle cx="589" cy="73" r="1" fill="#fff" opacity="0.35"/><circle cx="600" cy="309" r="1.6" fill="#fff" opacity="0.35"/><circle cx="236" cy="33" r="1" fill="#fff" opacity="0.7"/><circle cx="439" cy="83" r="0.8" fill="#fff" opacity="0.7"/><circle cx="583" cy="427" r="1" fill="#fff" opacity="0.35"/><circle cx="605" cy="302" r="1" fill="#fff" opacity="0.7"/><circle cx="109" cy="290" r="0.8" fill="#fff" opacity="0.35"/><circle cx="643" cy="115" r="1.6" fill="#fff" opacity="0.9"/><circle cx="331" cy="248" r="1.6" fill="#fff" opacity="0.7"/><circle cx="316" cy="137" r="1" fill="#fff" opacity="0.5"/><circle cx="93" cy="304" r="1.2" fill="#fff" opacity="0.9"/><circle cx="361" cy="383" r="1.6" fill="#fff" opacity="0.7"/><circle cx="633" cy="47" r="0.8" fill="#fff" opacity="0.9"/><circle cx="178" cy="397" r="1.2" fill="#fff" opacity="0.5"/><circle cx="510" cy="225" r="0.8" fill="#fff" opacity="0.35"/><circle cx="581" cy="303" r="1.2" fill="#fff" opacity="0.7"/><circle cx="721" cy="189" r="1.6" fill="#fff" opacity="0.9"/><circle cx="80" cy="440" r="0.8" fill="#fff" opacity="0.7"/><circle cx="495" cy="366" r="0.8" fill="#fff" opacity="0.35"/><circle cx="758" cy="369" r="1.2" fill="#fff" opacity="0.9"/><circle cx="301" cy="376" r="1.6" fill="#fff" opacity="0.7"/><circle cx="33" cy="246" r="1.2" fill="#fff" opacity="0.5"/><circle cx="635" cy="69" r="1.6" fill="#fff" opacity="0.35"/><circle cx="233" cy="403" r="1.2" fill="#fff" opacity="0.5"/><circle cx="766" cy="136" r="1.6" fill="#fff" opacity="0.9"/><circle cx="518" cy="51" r="1" fill="#fff" opacity="0.9"/><circle cx="421" cy="291" r="1.2" fill="#fff" opacity="0.5"/><circle cx="450" cy="291" r="1.2" fill="#fff" opacity="0.9"/><circle cx="377" cy="359" r="1.6" fill="#fff" opacity="0.5"/><circle cx="164" cy="52" r="1" fill="#fff" opacity="0.5"/><circle cx="247" cy="347" r="1" fill="#fff" opacity="0.35"/><circle cx="506" cy="435" r="1" fill="#fff" opacity="0.7"/><circle cx="298" cy="12" r="1" fill="#fff" opacity="0.9"/><circle cx="557" cy="199" r="1.2" fill="#fff" opacity="0.5"/><circle cx="717" cy="273" r="0.8" fill="#fff" opacity="0.9"/><circle cx="706" cy="418" r="1.6" fill="#fff" opacity="0.9"/><circle cx="418" cy="211" r="0.8" fill="#fff" opacity="0.9"/><circle cx="659" cy="215" r="0.8" fill="#fff" opacity="0.5"/><circle cx="78" cy="116" r="1.6" fill="#fff" opacity="0.5"/><circle cx="122" cy="184" r="0.8" fill="#fff" opacity="0.35"/><circle cx="10" cy="300" r="1" fill="#fff" opacity="0.35"/><circle cx="382" cy="324" r="0.8" fill="#fff" opacity="0.35"/><circle cx="222" cy="324" r="1.6" fill="#fff" opacity="0.5"/><circle cx="659" cy="139" r="1.2" fill="#fff" opacity="0.7"/><circle cx="495" cy="72" r="0.8" fill="#fff" opacity="0.9"/><circle cx="487" cy="255" r="1.6" fill="#fff" opacity="0.7"/><circle cx="97" cy="83" r="0.8" fill="#fff" opacity="0.7"/><circle cx="768" cy="145" r="1.6" fill="#fff" opacity="0.5"/><circle cx="538" cy="21" r="1" fill="#fff" opacity="0.7"/><circle cx="160" cy="363" r="0.8" fill="#fff" opacity="0.7"/><circle cx="668" cy="56" r="1.2" fill="#fff" opacity="0.7"/><circle cx="181" cy="192" r="1" fill="#fff" opacity="0.7"/><circle cx="661" cy="124" r="1" fill="#fff" opacity="0.5"/><circle cx="420" cy="388" r="1" fill="#fff" opacity="0.5"/><circle cx="540" cy="262" r="1.2" fill="#fff" opacity="0.35"/><circle cx="38" cy="414" r="1.2" fill="#fff" opacity="0.9"/><circle cx="275" cy="109" r="1.2" fill="#fff" opacity="0.9"/><circle cx="750" cy="188" r="1.2" fill="#fff" opacity="0.35"/><circle cx="235" cy="62" r="1" fill="#fff" opacity="0.9"/><circle cx="211" cy="182" r="1" fill="#fff" opacity="0.9"/><circle cx="649" cy="322" r="0.8" fill="#fff" opacity="0.9"/><circle cx="678" cy="186" r="0.8" fill="#fff" opacity="0.35"/><circle cx="407" cy="410" r="1" fill="#fff" opacity="0.9"/><circle cx="192" cy="232" r="1.2" fill="#fff" opacity="0.35"/><circle cx="749" cy="212" r="1.6" fill="#fff" opacity="0.9"/>
+                <circle cx="400" cy="225" r="205" fill="url(#lg-ring)" stroke="#0b1c55" stroke-width="4"/>
+                <circle cx="400" cy="225" r="138" fill="url(#lg-disc)" stroke="#6aa0ff" stroke-width="3"/>
+                <g transform="translate(400 225)">
+                  <g class="logo-spin" fill="none" stroke="#9fc4ff" stroke-width="1.1" opacity="0.9"><ellipse rx="150" ry="36" transform="rotate(0)"/><ellipse rx="150" ry="36" transform="rotate(15)"/><ellipse rx="150" ry="36" transform="rotate(30)"/><ellipse rx="150" ry="36" transform="rotate(45)"/><ellipse rx="150" ry="36" transform="rotate(60)"/><ellipse rx="150" ry="36" transform="rotate(75)"/><ellipse rx="150" ry="36" transform="rotate(90)"/><ellipse rx="150" ry="36" transform="rotate(105)"/><ellipse rx="150" ry="36" transform="rotate(120)"/><ellipse rx="150" ry="36" transform="rotate(135)"/><ellipse rx="150" ry="36" transform="rotate(150)"/><ellipse rx="150" ry="36" transform="rotate(165)"/></g>
+                  <g class="logo-spin-slow"><text transform="rotate(0) translate(0 -92) rotate(0)" class="logo-sec">&#167;</text><text transform="rotate(60) translate(0 -92) rotate(-60)" class="logo-sec">&#167;</text><text transform="rotate(120) translate(0 -92) rotate(-120)" class="logo-sec">&#167;</text><text transform="rotate(180) translate(0 -92) rotate(-180)" class="logo-sec">&#167;</text><text transform="rotate(240) translate(0 -92) rotate(-240)" class="logo-sec">&#167;</text><text transform="rotate(300) translate(0 -92) rotate(-300)" class="logo-sec">&#167;</text></g>
+                </g>
+                <text class="logo-ring"><textPath href="#lg-top" startOffset="50%" text-anchor="middle">WHO WANTS TO KNOW</textPath></text>
+                <text class="logo-ring"><textPath href="#lg-bottom" startOffset="50%" text-anchor="middle">WHO WANTS TO KNOW</textPath></text>
+                <path d="M195 225 l12 -12 12 12 -12 12z M581 225 l12 -12 12 12 -12 12z" fill="url(#lg-gold)"/>
+                <rect x="212" y="192" width="376" height="66" rx="33" fill="#0d1e5a" stroke="#4d86ea" stroke-width="3"/>
+                <text x="400" y="240" class="logo-center" text-anchor="middle">THE ANSWER</text>
+                <circle class="logo-flare" cx="268" cy="258" r="60" fill="url(#lg-flare)"/>
+                <circle class="logo-flare logo-flare-2" cx="548" cy="178" r="44" fill="url(#lg-flare)"/>
+              </svg>
+              <p class="splash-sub">One compliance question. Five lifelines. The same crowd answers every time.</p>
+            </div>
+          </section>
+          <section class="slide">
+            <div class="slide-split">
+              <img src="img/crowd-of-amateurs.png" alt="Illustration of a large, diverse crowd of people" />
+              <div>
+                <h3>You are asking a crowd of a thousand non-experts</h3>
+                <p>Picture a thousand well-read, well-meaning people with no particular expertise. You ask a question and you get back whatever most of them would say, in one confident voice.</p>
+                <ul>
+                  <li>They have read almost everything ever published.</li>
+                  <li>They have read none of your files unless you hand them over.</li>
+                  <li>They answer fast, and they always answer.</li>
+                  <li>There is no minority report. The dissenters are averaged away.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section class="slide">
+            <h3>Five ways to get help</h3>
+            <p>On the show, the contestant has lifelines: each one a different way of bringing more into the room, each with its own cost. The same crowd answers every question on this page. What changes is what someone brings back before it does.</p>
+            <div class="board">
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><figcaption><strong>1 No context</strong>Ask the audience</figcaption></figure>
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Bring your notes"><use href="#ll-notes"/></svg><figcaption><strong>2 Pasted context</strong>Bring your own notes</figcaption></figure>
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Phone a friend"><use href="#ll-phone"/></svg><figcaption><strong>3 Web search</strong>Phone a friend</figcaption></figure>
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><figcaption><strong>4 eCFR lookup</strong>Ask the expert</figcaption></figure>
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Card catalog"><use href="#ll-catalog"/></svg><figcaption><strong>5 Vector database</strong>The card catalog</figcaption></figure>
+            </div>
+          </section>
+          <section class="slide">
+            <div class="slide-split">
+              <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><span class="slide-lifeline">Ask the audience</span></div>
+              <div>
+                <h3><span class="how-num">1</span>No context</h3>
+                <p>The crowd votes and you take the majority, confidence percentage and all. Nobody leaves the room and nothing is looked up.</p>
+                <p>On common knowledge the audience is right most of the time, which is why people trust it. It fails on the obscure question and on the question whose answer changed after the crowd stopped reading, and the percentages look just as confident either way.</p>
+                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Instant and free.</dd><dt class="is-cost">Cost</dt><dd>Frozen on a date, and it cannot tell you so.</dd></dl>
+              </div>
+            </div>
+          </section>
+          <section class="slide">
+            <div class="slide-split">
+              <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Bring your own notes"><use href="#ll-notes"/></svg><span class="slide-lifeline">Bring your own notes</span></div>
+              <div>
+                <h3><span class="how-num">2</span>Pasted context</h3>
+                <p>The lifeline the show never allowed. You walk up and hand the crowd a page, and the crowd answers from that page and nothing else.</p>
+                <p>It is the most common thing people do in a chat window. The crowd does not know where the page came from or how old it is; you do, or you should. The two fill links in the paste box load 2 CFR 200.414(f) as it reads today and as it read in 2023, so you can hand over either and watch the crowd answer faithfully from the one you chose.</p>
+                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>You know exactly what it read.</dd><dt class="is-cost">Cost</dt><dd>You have to find the right text, and the right version, yourself.</dd></dl>
+              </div>
+            </div>
+          </section>
+          <section class="slide">
+            <div class="slide-split">
+              <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Phone a friend"><use href="#ll-phone"/></svg><span class="slide-lifeline">Phone a friend</span></div>
+              <div>
+                <h3><span class="how-num">3</span>Web search</h3>
+                <p>Someone in the crowd phones a friend, and the friend googles it while the clock runs. Back come eight headlines with the first lines under each, from whatever pages ranked that day, and the crowd answers from those.</p>
+                <p>Nobody reads an article through. The show dropped this lifeline in 2010 for exactly this reason: the friend had become a search engine. On this page the friend is a SearXNG metasearch on the AI4RA MCP server, merging Google, Bing, DuckDuckGo, Brave and others.</p>
+                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Reaches anything public, including what changed last week.</dd><dt class="is-cost">Cost</dt><dd>Anyone’s page, any year. The crowd referees sources it cannot judge.</dd></dl>
+              </div>
+            </div>
+          </section>
+          <section class="slide">
+            <div class="slide-split">
+              <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><span class="slide-lifeline">Ask the expert</span></div>
+              <div>
+                <h3><span class="how-num">4</span>eCFR lookup</h3>
+                <p>Someone in the crowd calls the records office. The crowd first agrees on two or three words to ask for. The clerk searches 2 CFR 200 on ecfr.gov, pulls the section, and when it is long the crowd says which paragraph to read aloud. The crowd answers from that paragraph, citation and date included.</p>
+                <p>On this page the clerk is the AI4RA MCP server’s eCFR tools. It is the slowest lifeline and the one with the most steps that can fail, and it is the only one whose answer changes when the regulation changes rather than when the crowd does.</p>
+                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Current, cited and checkable to the paragraph.</dd><dt class="is-cost">Cost</dt><dd>Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph.</dd></dl>
+              </div>
+            </div>
+          </section>
+          <section class="slide">
+            <div class="slide-split">
+              <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="The card catalog, or the 50:50"><use href="#ll-catalog"/></svg><span class="slide-lifeline">The card catalog, or the 50:50</span></div>
+              <div>
+                <h3><span class="how-num">5</span>Vector database</h3>
+                <p>Before the show, 2 CFR 200 was cut into 1,103 passages and each got a card, filed by meaning rather than alphabet (a vector from a small embedding model). Someone files the question the same way, pulls the four closest cards, and the crowd answers from those passages.</p>
+                <p>Like the 50:50, it narrows the field rather than answering, and it can leave you with cards that circle the answer without landing on it. The catalog lives in your browser, so nothing leaves it for this step, and it is only as current as the day it was filed.</p>
+                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Fast, cheap and private: the whole corpus searched by meaning, in your browser.</dd><dt class="is-cost">Cost</dt><dd>Only as current as the day it was built, and a near miss looks like a hit.</dd></dl>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="show-nav">
+          <button type="button" class="nav-btn" id="show-prev">&larr;</button>
+          <div class="show-dots" id="show-dots"></div>
+          <button type="button" class="nav-btn is-primary" id="show-next">&rarr;</button>
         </div>
 
         <details class="how-more">
-          <summary>Ways not on the page</summary>
+          <summary>Not on the board</summary>
           <ul class="how-list">
-            <li><strong>Structured data over SQL.</strong> When the record is a table rather than prose, the model should write the query and let a database compute the answer. <a href="https://ui-insight.github.io/data-crawler-carl/" target="_blank" rel="noopener">Data Crawler Carl</a> does that for any CSV, in the browser, and is the sixth way in the workshop.</li>
-            <li><strong>Files in reach of a local agent.</strong> Tools that run on your own machine, such as Claude Code, Cursor or Copilot, let you name a file with <code>@path/to/file</code> and the agent reads it into context. Same idea as pasting, with the reading done for you, and the same obligation: you still have to know whether that file is the governing one.</li>
-            <li><strong>Long context.</strong> Paste the whole of 2 CFR 200 and ask. It fits in some models&rsquo; windows now, at a cost in time and money per question, and the model still has to find the paragraph.</li>
+            <li><strong>Structured data over SQL.</strong> When the record is a table rather than prose, the crowd should write the query and let a database compute the answer. <a href="https://ui-insight.github.io/data-crawler-carl/" target="_blank" rel="noopener">Data Crawler Carl</a> does that for any CSV, in the browser, and is the sixth way in the workshop.</li>
+            <li><strong>Files in reach of a local agent.</strong> Tools that run on your own machine, such as Claude Code, Cursor or Copilot, let you name a file with <code>@path/to/file</code> and the agent reads it into context. Same as handing over your notes, with the fetching done for you, and the same obligation: you still have to know whether that file is the governing one.</li>
+            <li><strong>Long context.</strong> Hand the crowd the whole of 2 CFR 200 and ask. It fits in some models&rsquo; windows now, at a cost in time and money per question, and the crowd still has to find the paragraph.</li>
           </ul>
         </details>
         <details class="how-more">
@@ -211,7 +345,7 @@
             <li>Your question goes to the AI4RA MCP server for the web search and the eCFR lookup. The server keeps no keys and logs none.</li>
             <li>Nothing leaves for the vector database step. The embedding runs in your browser.</li>
           </ul>
-          <p>This is a static page on GitHub Pages with no server of its own. Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>; the MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>. Icons by <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a> (ISC).</p>
+          <p>Same model, same question, temperature 0, one system prompt, every time; under every answer on the page, <em>What the model was handed</em> shows exactly what came back. This is a static page on GitHub Pages with no server of its own. Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>; the MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>.</p>
         </details>
         <button class="modal-close-btn" data-close="how-modal">Close</button>
       </div>

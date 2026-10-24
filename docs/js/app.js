@@ -459,6 +459,28 @@ async function warmVector() {
   }
 }
 
+/* ── The How it works slideshow ── */
+
+let slideIndex = 0;
+
+function showSlide(i) {
+  const slides = Array.from(document.querySelectorAll('#show .slide'));
+  if (!slides.length) return;
+  slideIndex = (i + slides.length) % slides.length;
+  slides.forEach((sl, k) => sl.classList.toggle('is-active', k === slideIndex));
+  document.querySelectorAll('#show-dots button').forEach((d, k) => d.classList.toggle('is-active', k === slideIndex));
+}
+
+function wireShow() {
+  const slides = document.querySelectorAll('#show .slide');
+  const dots = $('show-dots');
+  slides.forEach((_, k) => dots.appendChild(el('button', { type: 'button', 'aria-label': `Slide ${k + 1}`, onclick: () => showSlide(k) })));
+  $('show-prev').addEventListener('click', () => showSlide(slideIndex - 1));
+  $('show-next').addEventListener('click', () => showSlide(slideIndex + 1));
+  document.querySelector('[data-open="how-modal"]').addEventListener('click', () => showSlide(0));
+  showSlide(0);
+}
+
 /* ── Key modal and model picker ── */
 
 function openModal(id) { $(id).classList.add('visible'); }
@@ -536,6 +558,7 @@ function init() {
   wireModals();
   wireKey();
   wirePaste();
+  wireShow();
 
   const presets = $('presets');
   for (const q of PRESETS) {
@@ -549,6 +572,11 @@ function init() {
   // Arrow keys step through the ways when the focus is not in a text field.
   document.addEventListener('keydown', e => {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;
+    if ($('how-modal').classList.contains('visible')) {
+      if (e.key === 'ArrowRight') showSlide(slideIndex + 1);
+      if (e.key === 'ArrowLeft') showSlide(slideIndex - 1);
+      return;
+    }
     if (document.querySelector('.modal-overlay.visible')) return;
     if (e.key === 'ArrowRight') show(current + 1, true);
     if (e.key === 'ArrowLeft') show(current - 1, true);

@@ -322,20 +322,57 @@ a { color: inherit; }
   .modal-dialog { padding: 1.4rem 1.2rem; }
 }
 
-/* ── How it works: one row per way ── */
-.how-rows { display: flex; flex-direction: column; gap: 0.8rem; margin: 1rem 0 1.2rem; }
-.how-row { margin: 0; display: grid; grid-template-columns: 190px 1fr; gap: 1rem; align-items: center; background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-.how-tile { align-self: stretch; display: grid; place-items: center; min-height: 130px; padding: 0.6rem; background: var(--gold-soft); color: var(--ink); border-right: 1px solid var(--border); }
-.how-icon { width: 60%; height: auto; max-width: 96px; }
-.how-tile img { display: block; width: 100%; height: auto; max-height: 150px; object-fit: contain; }
-.how-row figcaption { padding: 0.8rem 1rem 0.8rem 0; font-size: 0.92rem; line-height: 1.5; }
-.how-row h3 { margin: 0 0 0.3rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.45rem; }
-.how-num { flex: none; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--ink); color: var(--gold); font-size: 0.78rem; font-weight: 800; display: grid; place-items: center; }
-.how-row figcaption p { margin: 0; color: #333; }
-@media (max-width: 640px) {
-  .how-row { grid-template-columns: 1fr; }
-  .how-tile { border-right: none; border-bottom: 1px solid var(--border); min-height: 110px; }
-  .how-row figcaption { padding: 0 0.9rem 0.9rem; }
+/* ── How it works: a slideshow ── */
+.how-dialog { padding-top: 1.2rem; }
+.show { position: relative; min-height: 24rem; }
+.slide { display: none; animation: slide-in 0.25s ease; }
+.slide.is-active { display: block; }
+@keyframes slide-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+.slide h3 { margin: 0 0 0.6rem; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; letter-spacing: -0.01em; }
+.slide p { margin: 0 0 0.6rem; font-size: 0.95rem; }
+.slide ul { padding-left: 1.2rem; margin: 0; font-size: 0.92rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.slide-split { display: grid; grid-template-columns: 240px 1fr; gap: 1.4rem; align-items: start; }
+.slide-split > img { width: 100%; height: auto; align-self: center; }
+.slide-icon { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; padding-top: 0.3rem; }
+.lifeline { width: 100%; max-width: 230px; height: auto; filter: drop-shadow(0 4px 10px rgba(10, 26, 63, 0.25)); }
+.slide-lifeline { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #2f5fa8; text-align: center; }
+.how-num { flex: none; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--ink); color: var(--gold); font-size: 0.8rem; font-weight: 800; display: grid; place-items: center; }
+.slide-tradeoff { margin: 0.6rem 0 0; font-size: 0.85rem; display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.7rem; padding: 0.6rem 0.8rem; background: #fafaf8; border: 1px solid var(--border); border-radius: 8px; }
+.slide-tradeoff dt { font-weight: 800; text-transform: uppercase; font-size: 0.66rem; letter-spacing: 0.05em; padding-top: 0.2rem; }
+.slide-tradeoff dt.is-benefit { color: var(--green); }
+.slide-tradeoff dt.is-cost { color: var(--red); }
+.slide-tradeoff dd { margin: 0; color: #333; }
+
+/* The splash: a ring logo whose inner wheel turns. Nothing zooms. */
+.splash-board { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+.logo { display: block; width: 100%; max-width: 760px; height: auto; border-radius: 12px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.logo-ring { font-size: 30px; font-weight: 900; letter-spacing: 0.2em; fill: #fff; }
+.logo-center { font-size: 44px; font-weight: 900; letter-spacing: 0.06em; fill: #fff; paint-order: stroke; stroke: #06112f; stroke-width: 6px; }
+.logo-sec { font-size: 74px; font-weight: 900; fill: url(#lg-gold); text-anchor: middle; dominant-baseline: central; paint-order: stroke; stroke: #3a2600; stroke-width: 2px; }
+.logo-spin { animation: logo-spin 28s linear infinite; }
+.logo-spin-slow { animation: logo-spin 60s linear infinite reverse; }
+.logo-flare { animation: logo-flare 5s ease-in-out infinite; }
+.logo-flare-2 { animation-delay: 2.5s; }
+@keyframes logo-spin { to { transform: rotate(360deg); } }
+@keyframes logo-flare { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+.splash-sub { margin: 0.2rem 0 0; font-size: 0.95rem; color: #333; text-align: center; }
+@media (prefers-reduced-motion: reduce) { .logo-spin, .logo-spin-slow, .logo-flare { animation: none; } }
+
+.board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; padding: 1.2rem 1rem; border-radius: 12px; background: radial-gradient(ellipse at 50% 40%, #16307a 0%, #0a1a3f 60%, #060f28 100%); }
+.board figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.board .lifeline { max-width: 150px; }
+.board figcaption { text-align: center; font-size: 0.74rem; color: #cfe0ff; line-height: 1.3; }
+.board figcaption strong { display: block; color: #fff; font-size: 0.82rem; }
+
+.show-nav { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin: 0.9rem 0 1rem; }
+.show-dots { display: flex; gap: 0.4rem; }
+.show-dots button { width: 0.7rem; height: 0.7rem; border-radius: 50%; border: none; background: #d6d6d2; cursor: pointer; padding: 0; }
+.show-dots button.is-active { background: var(--gold); }
+@media (max-width: 700px) {
+  .slide-split { grid-template-columns: 1fr; }
+  .slide-icon { flex-direction: row; justify-content: flex-start; }
+  .lifeline { max-width: 150px; }
+  .board { grid-template-columns: repeat(2, 1fr); }
 }
 .how-more { margin: 0 0 0.6rem; }
 .how-more > summary { cursor: pointer; font-weight: 700; color: #7a5a00; }
