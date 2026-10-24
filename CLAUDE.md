@@ -2,7 +2,7 @@
 
 ## Project
 
-A static teaching page for the AI4RA workshops at the University of Idaho. One research compliance question is answered five ways, by the same model: from memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from a live eCFR lookup over MCP. The framing is Plato's Thamus; the README is the essay and the page is the demonstration. Authors: Nathan Layman and Bert Baumgaertner.
+A static teaching page for the AI4RA workshops at the University of Idaho. One research compliance question is answered five ways, by the same model: from memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from the regulation itself, read live over MCP. The framing is Plato's Thamus; the README is the essay and the page is the demonstration. Authors: Nathan Layman and Bert Baumgaertner.
 
 ## Layout
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f1b300" />
     <title>Remembering Thamus</title>
-    <meta name="description" content="Ask a research compliance question five ways, one at a time: from the model's memory, from text you paste, from a web search, from a vector database of 2 CFR 200, and from a live eCFR lookup over MCP. Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down." />
+    <meta name="description" content="Ask a research compliance question five ways, one at a time: from the model's memory, from text you paste, from a web search, from a vector database of 2 CFR 200, and from the regulation itself, read live over MCP. Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down." />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
@@ -67,12 +67,12 @@
         </div>
 
         <div id="way-end" class="way-end" hidden>
-          <p class="discussion-q">Which do you trust more: someone who remembers everything, or someone who can look up the answer to anything?</p>
+          <p class="discussion-q">Which do you trust more: someone who remembers everything, or someone who knows where everything is written?</p>
           <p>Thamus would say the first. You have just watched five arguments, and none of them settles it. Before you answer, decide what a person has to carry in their own head to tell whether what came back is right.</p>
           <ul class="end-list">
             <li>What did the person have to already know to catch the memory answer when it was wrong?</li>
             <li>What did they have to know to paste the right text, and the right version of it?</li>
-            <li>When the lookup showed its work, who in the room could check it?</li>
+            <li>When the regulation was read out with its citation, who in the room could check it?</li>
           </ul>
         </div>
 
@@ -123,7 +123,7 @@
           <ul>
             <li><strong>Tab-scoped.</strong> The key is held in sessionStorage, which belongs to this browser tab. It clears when the tab closes and is never written to disk.</li>
             <li><strong>Static site.</strong> This page is served as files from GitHub Pages. No server here stores or sees your key.</li>
-            <li><strong>Sent only to the model&rsquo;s gateway.</strong> A key starting with <code>mr2_</code> goes to the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy. Any other key is treated as a Google Gemini key and goes to Google. The eCFR lookup, the web search and the vector database need no key at all.</li>
+            <li><strong>Sent only to the model&rsquo;s gateway.</strong> A key starting with <code>mr2_</code> goes to the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy. Any other key is treated as a Google Gemini key and goes to Google. Reading the regulation, the web search and the vector database need no key at all.</li>
             <li><strong>URL stripped.</strong> A key that arrives as <code>?key=</code> is read once and removed from the address bar.</li>
             <li><strong>Facilitators:</strong> pre-fill by sharing a link to this page with <code>?key=YOUR_KEY</code> appended. Mint a workshop key and revoke it afterward.</li>
           </ul>
@@ -264,7 +264,7 @@
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><figcaption><strong>1 No context</strong>Ask the audience</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Bring your notes"><use href="#ll-notes"/></svg><figcaption><strong>2 Pasted context</strong>Bring your own notes</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Phone a friend"><use href="#ll-phone"/></svg><figcaption><strong>3 Web search</strong>Phone a friend</figcaption></figure>
-              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><figcaption><strong>4 eCFR lookup</strong>Ask the expert</figcaption></figure>
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><figcaption><strong>4 Read the regulation</strong>Ask the expert</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Card catalog"><use href="#ll-catalog"/></svg><figcaption><strong>5 Vector database</strong>The card catalog</figcaption></figure>
             </div>
           </section>
@@ -273,7 +273,7 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><span class="slide-lifeline">Ask the audience</span></div>
               <div>
                 <h3><span class="how-num">1</span>No context</h3>
-                <p>The crowd votes and you take the majority, confidence percentage and all. Nobody leaves the room and nothing is looked up.</p>
+                <p>The crowd votes and you take the majority, confidence percentage and all. Nobody leaves the room and nobody opens a book.</p>
                 <p>On common knowledge the audience is right most of the time, which is why people trust it. It fails on the obscure question and on the question whose answer changed after the crowd stopped reading, and the percentages look just as confident either way.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Instant and free.</dd><dt class="is-cost">Cost</dt><dd>Frozen on a date, and it cannot tell you so.</dd></dl>
               </div>
@@ -305,7 +305,7 @@
             <div class="slide-split">
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><span class="slide-lifeline">Ask the expert</span></div>
               <div>
-                <h3><span class="how-num">4</span>eCFR lookup</h3>
+                <h3><span class="how-num">4</span>Read the regulation</h3>
                 <p>Someone in the crowd calls the records office. The crowd first agrees on two or three words to ask for. The clerk searches 2 CFR 200 on ecfr.gov, pulls the section, and when it is long the crowd says which paragraph to read aloud. The crowd answers from that paragraph, citation and date included.</p>
                 <p>On this page the clerk is the AI4RA MCP server’s eCFR tools. It is the slowest lifeline and the one with the most steps that can fail, and it is the only one whose answer changes when the regulation changes rather than when the crowd does.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Current, cited and checkable to the paragraph.</dd><dt class="is-cost">Cost</dt><dd>Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph.</dd></dl>
@@ -342,7 +342,7 @@
           <summary>What leaves your browser</summary>
           <ul class="how-list">
             <li>Your question and the retrieved text go to the model&rsquo;s gateway: the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy with an <code>mr2_</code> key, or Google with a Gemini key.</li>
-            <li>Your question goes to the AI4RA MCP server for the web search and the eCFR lookup. The server keeps no keys and logs none.</li>
+            <li>Your question goes to the AI4RA MCP server for the web search and for reading the regulation. The server keeps no keys and logs none.</li>
             <li>Nothing leaves for the vector database step. The embedding runs in your browser.</li>
           </ul>
           <p>Same model, same question, temperature 0, one system prompt, every time; under every answer on the page, <em>What the model was handed</em> shows exactly what came back. This is a static page on GitHub Pages with no server of its own. Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>; the MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>.</p>

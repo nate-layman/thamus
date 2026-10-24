@@ -1,6 +1,6 @@
 # Remembering Thamus
 
-Ask a research compliance question five ways, one at a time: from the model's memory, from text you paste, from a web search, from a live eCFR lookup over MCP, and from a vector database of 2 CFR 200. The same model answers every time. Only what it is handed differs. Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down.
+Ask a research compliance question five ways, one at a time: from the model's memory, from text you paste, from a web search, from the regulation itself, read live over MCP, and from a vector database of 2 CFR 200. The same model answers every time. Only what it is handed differs. Thamus warned that writing would ruin memory. He is remembered only because Plato wrote him down.
 
 **Live:** [nate-layman.github.io/thamus](https://nate-layman.github.io/thamus/)
 
@@ -32,7 +32,7 @@ That is worth sitting with, because the same tension runs through every tool tha
 
 Thamus was describing a person who has access to the record and has stopped learning. That person is real, and research administration has met them.
 
-- **The appearance of knowledge.** Someone who can find the regulation is not the same as someone who understands it. An administrator who has never learned the de minimis rule cannot tell a correct answer from a plausible one, whether it comes from a colleague, a search result, or a model. Lookup gives you a sentence. Judgment is what tells you whether the sentence is right.
+- **The appearance of knowledge.** Someone who can find the regulation is not the same as someone who understands it. An administrator who has never learned the de minimis rule cannot tell a correct answer from a plausible one, whether it comes from a colleague, a search result, or a model. The record gives you a sentence. Judgment is what tells you whether the sentence is right.
 - **The skill that fades.** What you never hold, you never practice. Psychologists have measured this with search engines: people remember where to find a fact more readily than the fact itself (Sparrow, Liu and Wegner, *Science*, 2011). A profession that delegates all of its remembering keeps the appearance of expertise and loses the substance.
 - **The dependence.** A person who can only answer with the record open is helpless when the record is unavailable, wrong, or out of date, and cannot tell which of those has happened.
 
@@ -65,7 +65,7 @@ The remedy is the one Thamus refused. Give the model the written record and let 
 | 1 | **No context** | The question alone. The model answers from memory. | Instant and free. No infrastructure, no source to keep ready. | Frozen on a date, and it cannot tell you so. |
 | 2 | **Pasted context** | Whatever you put in the text box, and nothing else. You did the reading. | You know exactly what it read. | You have to find the right text, and the right version, yourself. |
 | 3 | **Web search** | The question goes to a search engine as typed. The model gets eight titles, addresses and snippets, and reads no page in full. | Reaches anything public, including what changed last week. | Anyone's page, any year. The model referees sources it cannot judge. |
-| 4 | **eCFR lookup** | The model turns the question into search words, a Model Context Protocol server searches the eCFR, and the model reads the one paragraph that bears on the question, with a pinpoint citation such as 2 CFR 200.414(f). | Current, cited and checkable to the paragraph. The answer changes when the regulation changes, not when the model does. | Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph. |
+| 4 | **Read the regulation** | The model turns the question into search words, a Model Context Protocol server searches the eCFR, and the model reads the one paragraph that bears on the question, with a pinpoint citation such as 2 CFR 200.414(f). | Current, cited and checkable to the paragraph. The answer changes when the regulation changes, not when the model does. | Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph. |
 | 5 | **Vector database** | 2 CFR 200 cut into 1,103 passages and embedded. The browser embeds the question with the same model, ranks every passage by cosine similarity, and hands over the nearest four. This is what most products call retrieval-augmented generation. | Fast, cheap and private: the whole corpus searched by meaning, in your browser. | Only as current as the day the index was built, and a near miss looks like a hit. |
 
 For a machine, Thamus's flaw is the feature. A model that is reminded is a model that can be checked. Under every answer the page shows exactly what the model was handed: the system prompt, the pasted text, the search results, the trail of eCFR calls and the paragraph that came back, or the passages and their scores.
@@ -81,7 +81,7 @@ For a machine, Thamus's flaw is the feature. A model that is reminded is a model
 | | Benefits | Costs |
 |---|---|---|
 | **For people** | The record outlasts memory and outlasts us. It can be checked, cited, shared, and corrected. No one should memorize the Code of Federal Regulations, and the rule you memorized in 2023 is wrong today. | What you never learn you cannot judge. Skills you do not use fade. A person who can only answer with the record open cannot tell when the record has failed them. |
-| **For a model** | Answers are current, cited, and checkable. The source can be versioned and shipped with the output. A wrong answer can be traced to a wrong passage rather than to a black box. | Every lookup costs time, infrastructure, and a source that has to be right and ready. The lookup can fail, the passage can be the wrong one, and the model can still misread what it is handed. The context window is a page limit. |
+| **For a model** | Answers are current, cited, and checkable. The source can be versioned and shipped with the output. A wrong answer can be traced to a wrong passage rather than to a black box. | Every trip to the record costs time, infrastructure, and a source that has to be right and ready. The lookup can fail, the passage can be the wrong one, and the model can still misread what it is handed. The context window is a page limit. |
 
 The two columns of that table are the two directions of the workshop. People need to keep enough in their own heads to judge what the record says. Models need to stop trusting what they remember and read the record every time. Neither direction is optional, and each one makes the other safe.
 
@@ -92,14 +92,14 @@ Ask the same question each way and look for five things.
 - **Confidence does not change.** The model sounds equally sure from memory and from the record. Confidence is not evidence.
 - **The paste is only as good as the paster.** The text box has two fill links: the paragraph of 2 CFR 200.414 as it stands today, and as it stood in 2023. Hand the model the 2023 text and it will answer from the 2023 text, politely and wrongly. The person who did the reading is the one who has to know which version they read.
 - **Search is wide and shallow.** Snippets come from anyone, in any year, and the model is left to referee. Often it lands on the right figure. Open the trail and see what it had to wade through.
-- **The lookup shows its work.** The search words, the section it read, and the paragraph it answered from are all visible. That trail is what an auditor would ask for, and it is what memory can never provide.
+- **The regulation, read live, shows its work.** The search words, the section it read, and the paragraph it answered from are all visible. That trail is what an auditor would ask for, and it is what memory can never provide.
 - **The index is close.** Retrieval over a vector index often lands near the right passage without landing on it, and the answer is a blend of what it found and what it remembered. The similarity scores are right there.
 
 Good questions to try are the ones whose answers changed in the 2024 revision of the Uniform Guidance: the de minimis rate, the equipment capitalization threshold, and the amount of each subaward that counts toward modified total direct costs. In the workshop, poll the room for a compliance question, enter it once, and step through the ways with Next.
 
 ## To end on
 
-Which do you trust more: someone who remembers everything, or someone who can look up the answer to anything?
+Which do you trust more: someone who remembers everything, or someone who knows where everything is written?
 
 Thamus would say the first. The page is five arguments, and none of them settles it. Before answering, decide what a person has to carry in their own head to tell whether what came back is right. What did the person have to already know to catch the memory answer when it was wrong? What did they have to know to paste the right text, and the right version of it? When the lookup showed its work, who in the room could check it?
 
@@ -107,7 +107,7 @@ Thamus would say the first. The page is five arguments, and none of them settles
 
 The page is static and runs in the browser, like [Data Crawler Carl](https://github.com/ui-insight/data-crawler-carl) and [Promptulus](https://github.com/AI4RA/promptulus), whose shell it borrows. GitHub Pages serves `docs/` from `main` through `.github/workflows/pages.yml`.
 
-**The key.** The ways that ask a model need one. A University of Idaho MindRouter key (prefix `mr2_`) routes the model calls through the AI4RA lakehouse proxy to the University's own models. Any other key is treated as a Google Gemini key and goes to Google. The key is held in sessionStorage, scoped to the tab, cleared when it closes, and never stored in this site's source. Facilitators pre-fill it by sharing a link with `?key=YOUR_KEY` appended, which the page reads once and strips from the address bar. The eCFR lookup, the web search and the vector database need no key: the first two go to the hosted [ai4ra-mcp](https://github.com/ui-insight/ai4ra-mcp) server, which allows any origin and logs no keys, and the third runs entirely in the browser.
+**The key.** The ways that ask a model need one. A University of Idaho MindRouter key (prefix `mr2_`) routes the model calls through the AI4RA lakehouse proxy to the University's own models. Any other key is treated as a Google Gemini key and goes to Google. The key is held in sessionStorage, scoped to the tab, cleared when it closes, and never stored in this site's source. Facilitators pre-fill it by sharing a link with `?key=YOUR_KEY` appended, which the page reads once and strips from the address bar. Reading the regulation, the web search and the vector database need no key: the first two go to the hosted [ai4ra-mcp](https://github.com/ui-insight/ai4ra-mcp) server, which allows any origin and logs no keys, and the third runs entirely in the browser.
 
 **On a laptop:**
 
