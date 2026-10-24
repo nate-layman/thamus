@@ -268,7 +268,7 @@
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><figcaption><strong>1 No context</strong>Ask the audience</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Bring your notes"><use href="#ll-notes"/></svg><figcaption><strong>2 Pasted context</strong>Bring your own notes</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Phone a friend"><use href="#ll-phone"/></svg><figcaption><strong>3 Web search</strong>Phone a friend</figcaption></figure>
-              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><figcaption><strong>4 eCFR API via MCP</strong>Ask the expert</figcaption></figure>
+              <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><figcaption><strong>4 API call</strong>Ask the expert</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Card catalog"><use href="#ll-catalog"/></svg><figcaption><strong>5 Vector database</strong>The card catalog</figcaption></figure>
             </div>
           </section>
@@ -309,7 +309,7 @@
             <div class="slide-split">
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><span class="slide-lifeline">Ask the expert</span></div>
               <div>
-                <h3><span class="how-num">4</span>eCFR API via MCP</h3>
+                <h3><span class="how-num">4</span>API call</h3>
                 <p>You hand the crowd the number for the records office. The crowd agrees on two or three words to ask for, the clerk finds the section and reads one paragraph aloud, and the crowd answers from that paragraph, citation and date included.</p>
                 <p><strong>What it actually is: the model fetching from an external source while it works.</strong> The model is given tools it can call, the way an app calls an API. Here the tools come from an MCP server (Model Context Protocol, an open standard for handing a model tools) that wraps the eCFR&rsquo;s own public API at ecfr.gov. The model calls <code>ecfr_search</code> with its two or three words, the server returns the matching sections of 2 CFR 200, the model calls <code>ecfr_get_regulation</code> on the top one, and when the section is long it picks the one paragraph to fetch. Only then does it answer, from text that arrived seconds ago.</p>
                 <p>The same pattern works for any source with an API: SAM.gov, NIH RePORTER, a sponsor&rsquo;s policy site, your own grants system. It is the slowest lifeline and the one with the most steps that can fail, and the only one whose answer changes when the source changes rather than when the model does. Every call it made is listed under the answer.</p>

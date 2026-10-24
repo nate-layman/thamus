@@ -50,7 +50,7 @@ const WAYS = [
   },
   {
     id: 'ecfr',
-    title: 'eCFR API via MCP',
+    title: 'API call',
     sub: 'Live. The model calls an external source over MCP, the eCFR API, and reads one paragraph.',
     benefit: 'Current, cited and checkable to the paragraph.',
     cost: 'Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph.',
