@@ -3,7 +3,7 @@
 // nothing, a passage you pasted, search-engine snippets, the nearest passages from a
 // vector index of 2 CFR 200, or the one eCFR paragraph a live lookup read.
 import { getKey, setKey, readKeyFromURL, wasKeyLoadedFromURL } from './key-manager.js';
-import { initAPI, hasAPIKey, callModel, backendName, listModels, setModel, currentModel, isMindRouterKey } from './api.js';
+import { initAPI, hasAPIKey, callModel, backendName, currentModel, isMindRouterKey } from './api.js';
 import { webSearch, formatResults } from './web-search.js';
 import { retrieve, loadModel, indexInfo, formatPassages } from './vector-index.js';
 import * as ecfr from './ecfr-lookup.js';
@@ -487,7 +487,7 @@ function wireShow() {
   showSlide(0);
 }
 
-/* ── Key modal and model picker ── */
+/* ── Key modal ── */
 
 function openModal(id) { $(id).classList.add('visible'); }
 function closeModal(id) { $(id).classList.remove('visible'); }
@@ -497,22 +497,6 @@ function wireModals() {
   document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.close)));
   document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('visible'); }));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.visible').forEach(m => m.classList.remove('visible')); });
-}
-
-async function refreshModels() {
-  const select = $('model');
-  const key = getKey();
-  select.innerHTML = '';
-  const fallback = currentModel();
-  select.appendChild(el('option', { value: fallback, text: fallback }));
-  if (!key) return;
-  try {
-    const models = await listModels();
-    select.innerHTML = '';
-    if (!models.includes(fallback)) models.unshift(fallback);
-    for (const id of models) select.appendChild(el('option', { value: id, text: id }));
-    select.value = fallback;
-  } catch { /* keep the default alone */ }
 }
 
 function updateKeyStatus() {
@@ -542,18 +526,14 @@ function wireKey() {
     if (!val) return;
     setKey(val);
     initAPI(val);
-    setModel('');
     updateKeyStatus();
-    refreshModels();
   });
   $('api-key-input').addEventListener('keydown', e => { if (e.key === 'Enter') $('api-key-save').click(); });
   $('api-key-clear').addEventListener('click', () => {
     setKey('');
     initAPI('');
     updateKeyStatus();
-    refreshModels();
   });
-  $('model').addEventListener('change', e => setModel(e.target.value));
 }
 
 /* ── Start ── */
@@ -592,7 +572,6 @@ function init() {
   const key = readKeyFromURL();
   if (key) initAPI(key);
   updateKeyStatus();
-  refreshModels();
   show(0, false);
   if (key && wasKeyLoadedFromURL()) {
     const toast = $('toast');

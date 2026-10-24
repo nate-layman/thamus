@@ -14,10 +14,9 @@ const LOCAL = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 // the public proxy only allows the published origins.
 export const MINDROUTER_BASE_URL = LOCAL ? '/v1' : 'https://nlayman-external.insight.uidaho.edu/v1';
 export const MINDROUTER_MODEL = 'qwen/qwen3.8-27b';
-export const GEMINI_MODEL = 'gemini-2.5-flash';
+export const GEMINI_MODEL = 'gemini-3.8-flash';
 
 let apiKey = '';
-let model = '';
 
 export function initAPI(key) {
   apiKey = (key || '').trim();
@@ -35,26 +34,9 @@ export function backendName(key) {
   return isMindRouterKey(key === undefined ? apiKey : key) ? 'MindRouter' : 'Google Gemini';
 }
 
-export function setModel(id) {
-  model = (id || '').trim();
-}
-
+// One model per backend, fixed. There is no picker: the comparison is between ways, not models.
 export function currentModel() {
-  return model || (isMindRouterKey(apiKey) ? MINDROUTER_MODEL : GEMINI_MODEL);
-}
-
-// The models the key can reach, for the picker. MindRouter lists them at /v1/models;
-// for Gemini a short fixed list stands in.
-export async function listModels() {
-  if (!apiKey) return [];
-  if (!isMindRouterKey(apiKey)) return ['gemini-2.5-flash', 'gemini-2.5-pro'];
-  const response = await fetch(`${MINDROUTER_BASE_URL}/models`, {
-    headers: { Authorization: `Bearer ${apiKey}` }
-  });
-  if (!response.ok) throw new Error(`MindRouter error ${response.status}`);
-  const data = await response.json();
-  const list = Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
-  return list.map(m => m.id || m.name).filter(Boolean).sort();
+  return isMindRouterKey(apiKey) ? MINDROUTER_MODEL : GEMINI_MODEL;
 }
 
 /**
@@ -110,7 +92,7 @@ async function callGemini(system, user, options) {
     config: {
       systemInstruction: system,
       maxOutputTokens: options.maxTokens || 400,
-      thinkingConfig: { thinkingBudget: 0 }
+      thinkingConfig: { thinkingLevel: 'low' }
     }
   });
   const text = response.text;

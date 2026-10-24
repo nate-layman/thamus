@@ -99,17 +99,6 @@ a { color: inherit; }
   color: var(--ink);
 }
 .ask-row select.method.is-end { background: var(--ink); color: var(--gold); border-color: var(--ink); }
-.ask-row select#model {
-  flex: 0 1 15rem;
-  min-width: 9rem;
-  padding: 0.5rem 0.6rem;
-  border: 2px solid rgba(25, 25, 25, 0.12);
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-family: var(--mono);
-  background: #fff;
-  color: var(--ink);
-}
 .ask-btn {
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
@@ -253,6 +242,7 @@ a { color: inherit; }
 .link-btn:hover { color: var(--ink); }
 
 .paste-line { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; font-size: 0.95rem; color: #333; }
+.paste-line[hidden] { display: none; }
 #paste-text {
   width: 100%;
   padding: 0.6rem 0.7rem;
