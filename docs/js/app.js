@@ -51,7 +51,7 @@ const WAYS = [
   {
     id: 'ecfr',
     title: 'Read the regulation',
-    sub: 'Live. The model finds the section in the eCFR and reads one paragraph.',
+    sub: 'Live. The model calls an external source over MCP, the eCFR API, and reads one paragraph.',
     benefit: 'Current, cited and checkable to the paragraph.',
     cost: 'Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph.',
     watch: 'It shows its work. The search words, the section it read, and the paragraph it answered from are all visible. That trail is what an auditor would ask for, and what memory can never provide.',
