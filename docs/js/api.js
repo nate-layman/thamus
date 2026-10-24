@@ -6,8 +6,8 @@
 //     on github.io needs);
 //   - any other key is treated as a Google Gemini key and goes to Google via the
 //     @google/genai SDK loaded from an ESM CDN.
-// Every column of the page asks the same model the same way: temperature 0, one
-// system prompt, one user message. Only what the model is handed differs.
+// Every column of the page asks the same model the same way: the model's default
+// settings, one system prompt, one user message. Only what the model is handed differs.
 
 const LOCAL = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 // On a laptop, scripts/serve.py serves docs/ and proxies /v1/* to MindRouter, because
@@ -80,7 +80,6 @@ async function callMindRouter(system, user, options) {
       body: JSON.stringify({
         model: currentModel(),
         messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
-        temperature: 0,
         max_tokens: options.maxTokens || 400
       })
     });
@@ -110,7 +109,6 @@ async function callGemini(system, user, options) {
     contents: [{ role: 'user', parts: [{ text: user }] }],
     config: {
       systemInstruction: system,
-      temperature: 0,
       maxOutputTokens: options.maxTokens || 400,
       thinkingConfig: { thinkingBudget: 0 }
     }

@@ -1,5 +1,5 @@
 // Remembering Thamus: one question, five ways of answering it, one at a time.
-// Every way asks the same model at temperature 0. Only what it is handed differs:
+// Every way asks the same model with its default settings. Only what it is handed differs:
 // nothing, a passage you pasted, search-engine snippets, the nearest passages from a
 // vector index of 2 CFR 200, or the one eCFR paragraph a live lookup read.
 import { getKey, setKey, readKeyFromURL, wasKeyLoadedFromURL } from './key-manager.js';
@@ -19,6 +19,8 @@ const PRESETS = [
 ];
 
 const ANSWER_RULES = 'Keep the answer to one or two sentences. State the figure or rule, then name the citation.';
+// For every way that hands the model something: what it was handed beats what it remembers.
+const TEXT_WINS = 'Where the supplied text differs from what you remember, the supplied text is right; answer from it, not from memory.';
 
 const WAYS = [
   {
@@ -289,7 +291,7 @@ async function runPaste(question) {
     return;
   }
   setStatus('paste', 'Asking the model, with your text in hand…');
-  const system = `Answer the question using only the text supplied. ${ANSWER_RULES} If the text names where it comes from, cite that. If the text does not answer the question, say so and do not guess.`;
+  const system = `Answer the question using only the text supplied. ${ANSWER_RULES} ${TEXT_WINS} If the text names where it comes from, cite that. If the text does not answer the question, say so and do not guess.`;
   const user = `Question: ${question}\n\nText:\n${pasted}`;
   const answer = await callModel(system, user);
   setStatus('paste', '');
@@ -319,7 +321,7 @@ async function runWeb(question) {
     return;
   }
   setStatus('web', `Asking the model, with ${search.results.length} snippets in hand…`);
-  const system = `Answer the question using only the web search results supplied: their titles, addresses and snippets. ${ANSWER_RULES} Name the result you relied on by its number and address. If the snippets do not settle the question, say so and do not guess. Snippets may be from different years and from anyone; prefer an official source and say if the results disagree.`;
+  const system = `Answer the question using only the web search results supplied: their titles, addresses and snippets. ${ANSWER_RULES} ${TEXT_WINS} Name the result you relied on by its number and address. If the snippets do not settle the question, say so and do not guess. Snippets may be from different years and from anyone; prefer an official source and say if the results disagree.`;
   const user = `Question: ${question}\n\nSearch results:\n${formatResults(search.results)}`;
   const answer = await callModel(system, user);
   setStatus('web', '');
@@ -342,7 +344,7 @@ async function runVector(question) {
     ])))
   ];
   setStatus('vector', `Asking the model, with ${passages.length} passages in hand…`);
-  const system = `Answer the question using only the regulation passages supplied. ${ANSWER_RULES} Name the pinpoint citation of the passage you relied on. If no passage answers the question, say so and do not guess.`;
+  const system = `Answer the question using only the regulation passages supplied. ${ANSWER_RULES} ${TEXT_WINS} Name the pinpoint citation of the passage you relied on. If no passage answers the question, say so and do not guess.`;
   const user = `Question: ${question}\n\nPassages from 2 CFR 200 (eCFR, current as of ${info.source_date}):\n${formatPassages(passages)}`;
   const answer = await callModel(system, user);
   setStatus('vector', '');
@@ -407,7 +409,7 @@ async function runEcfr(question) {
     return;
   }
   setStatus('ecfr', `Asking the model, with ${hit.pinpoint || hit.citation} in hand…`);
-  const system = `Answer the compliance question using only the regulation text supplied. ${ANSWER_RULES} If the text does not answer the question, say so and do not guess.`;
+  const system = `Answer the compliance question using only the regulation text supplied. ${ANSWER_RULES} ${TEXT_WINS} If the text does not answer the question, say so and do not guess.`;
   const user = `Question: ${question}\n\nRegulation text (${hit.pinpoint || hit.citation}, eCFR as of ${hit.date}):\n${hit.text}`;
   const answer = await callModel(system, user);
   setStatus('ecfr', '');
