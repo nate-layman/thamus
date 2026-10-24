@@ -125,6 +125,10 @@ a { color: inherit; }
 .ask-btn:hover { background: #f5c842; }
 .ask-btn:disabled { opacity: 0.5; cursor: progress; }
 
+.ask-row-own { margin-top: 0.5rem; }
+.ask-row-own input[type="text"] { font-size: 0.92rem; border-style: dashed; }
+.room-answer { margin: 0; padding: 0.5rem 0.8rem; font-size: 0.95rem; color: #333; background: #f3f3f1; border-left: 3px solid #bbb; border-radius: 6px; }
+.room-answer:empty { display: none; }
 .presets { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.7rem; }
 .preset {
   padding: 0.3rem 0.75rem;

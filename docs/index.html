@@ -31,9 +31,12 @@
       <section class="ask">
         <div class="ask-row">
           <input id="question" type="text" value="" placeholder="What de minimis indirect cost rate may a recipient without a negotiated rate charge?" autocomplete="off" aria-label="The question" />
-          <select id="method" class="method" title="How the model gets its context" aria-label="Method"></select>
+          <select id="method" class="method" title="Which lifeline" aria-label="Lifeline"></select>
           <select id="model" title="The model every way asks" aria-label="Model"></select>
           <button id="ask" class="ask-btn">Ask</button>
+        </div>
+        <div class="ask-row ask-row-own">
+          <input id="your-answer" type="text" placeholder="Your own answer first, before any lifeline (optional)" autocomplete="off" aria-label="Your own answer" />
         </div>
         <div id="presets" class="presets"></div>
       </section>
@@ -52,6 +55,7 @@
             <span id="paste-summary">Nothing pasted yet.</span>
             <button id="paste-open" type="button" class="ask-btn small" data-open="paste-modal">Paste context</button>
           </div>
+          <p id="room-answer" class="room-answer" hidden></p>
           <p id="way-status" class="way-status"></p>
           <div id="way-answer" class="way-answer is-muted"></div>
           <section id="way-trail" class="way-trail" hidden>
@@ -68,7 +72,7 @@
 
         <div id="way-end" class="way-end" hidden>
           <p class="discussion-q">Which do you trust more: someone who remembers everything, or someone who knows where everything is written?</p>
-          <p>Thamus would say the first. You have just watched five arguments, and none of them settles it. Before you answer, decide what a person has to carry in their own head to tell whether what came back is right.</p>
+          <p>Thamus would say the first. You have just watched five arguments, and none of them settles it. Whichever lifeline you used, you are the one who says final answer. Before you give it, decide what a person has to carry in their own head to tell whether what came back is right.</p>
           <ul class="end-list">
             <li>What did the person have to already know to catch the memory answer when it was wrong?</li>
             <li>What did they have to know to paste the right text, and the right version of it?</li>
@@ -239,15 +243,15 @@
                 <circle class="logo-flare" cx="268" cy="258" r="60" fill="url(#lg-flare)"/>
                 <circle class="logo-flare logo-flare-2" cx="548" cy="178" r="44" fill="url(#lg-flare)"/>
               </svg>
-              <p class="splash-sub">One compliance question. Five lifelines. The same crowd answers every time.</p>
+              <p class="splash-sub">One compliance question. You are the contestant. Five lifelines, and every one of them is the same crowd.</p>
             </div>
           </section>
           <section class="slide">
             <div class="slide-split">
               <img src="img/crowd-of-amateurs.png" alt="Illustration of a large, diverse crowd of people" />
               <div>
-                <h3>You are asking a crowd of a thousand non-experts</h3>
-                <p>Picture a thousand well-read, well-meaning people with no particular expertise. You ask a question and you get back whatever most of them would say, in one confident voice.</p>
+                <h3>You are the contestant</h3>
+                <p>You are the one who has to answer. You can answer from what you know, or you can use a lifeline. The first lifeline is a crowd: a thousand well-read, well-meaning people with no particular expertise. Ask them a question and you get back whatever most of them would say, in one confident voice.</p>
                 <ul>
                   <li>They have read almost everything ever published.</li>
                   <li>They have read none of your files unless you hand them over.</li>
@@ -258,8 +262,8 @@
             </div>
           </section>
           <section class="slide">
-            <h3>Five ways to get help</h3>
-            <p>On the show, the contestant has lifelines: each one a different way of bringing more into the room, each with its own cost. The same crowd answers every question on this page. What changes is what someone brings back before it does.</p>
+            <h3>Your lifelines</h3>
+            <p>Answering from your own knowledge uses no lifeline at all, and on the show it is the only answer that counts. The five on this board are all the same crowd. What changes is what you hand the crowd before it answers, and what that costs you.</p>
             <div class="board">
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><figcaption><strong>1 No context</strong>Ask the audience</figcaption></figure>
               <figure><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Bring your notes"><use href="#ll-notes"/></svg><figcaption><strong>2 Pasted context</strong>Bring your own notes</figcaption></figure>
@@ -273,7 +277,7 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the audience"><use href="#ll-audience"/></svg><span class="slide-lifeline">Ask the audience</span></div>
               <div>
                 <h3><span class="how-num">1</span>No context</h3>
-                <p>The crowd votes and you take the majority, confidence percentage and all. Nobody leaves the room and nobody opens a book.</p>
+                <p>You ask the crowd and take the majority, confidence percentage and all. Nobody leaves the room and nobody opens a book.</p>
                 <p>On common knowledge the audience is right most of the time, which is why people trust it. It fails on the obscure question and on the question whose answer changed after the crowd stopped reading, and the percentages look just as confident either way.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Instant and free.</dd><dt class="is-cost">Cost</dt><dd>Frozen on a date, and it cannot tell you so.</dd></dl>
               </div>
@@ -284,7 +288,7 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Bring your own notes"><use href="#ll-notes"/></svg><span class="slide-lifeline">Bring your own notes</span></div>
               <div>
                 <h3><span class="how-num">2</span>Pasted context</h3>
-                <p>The lifeline the show never allowed. You walk up and hand the crowd a page, and the crowd answers from that page and nothing else.</p>
+                <p>The lifeline the show never allowed. You hand the crowd a page before you ask, and the crowd answers from that page and nothing else.</p>
                 <p>It is the most common thing people do in a chat window. The crowd does not know where the page came from or how old it is; you do, or you should. The two fill links in the paste box load 2 CFR 200.414(f) as it reads today and as it read in 2023, so you can hand over either and watch the crowd answer faithfully from the one you chose.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>You know exactly what it read.</dd><dt class="is-cost">Cost</dt><dd>You have to find the right text, and the right version, yourself.</dd></dl>
               </div>
@@ -295,7 +299,7 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Phone a friend"><use href="#ll-phone"/></svg><span class="slide-lifeline">Phone a friend</span></div>
               <div>
                 <h3><span class="how-num">3</span>Web search</h3>
-                <p>Someone in the crowd phones a friend, and the friend googles it while the clock runs. Back come eight headlines with the first lines under each, from whatever pages ranked that day, and the crowd answers from those.</p>
+                <p>You hand the crowd a phone. It calls a friend who googles the question while the clock runs. Back come eight headlines with the first lines under each, from whatever pages ranked that day, and the crowd answers from those.</p>
                 <p>Nobody reads an article through. The show dropped this lifeline in 2010 for exactly this reason: the friend had become a search engine. On this page the friend is a SearXNG metasearch on the AI4RA MCP server, merging Google, Bing, DuckDuckGo, Brave and others.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Reaches anything public, including what changed last week.</dd><dt class="is-cost">Cost</dt><dd>Anyone’s page, any year. The crowd referees sources it cannot judge.</dd></dl>
               </div>
@@ -306,7 +310,7 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="Ask the expert"><use href="#ll-expert"/></svg><span class="slide-lifeline">Ask the expert</span></div>
               <div>
                 <h3><span class="how-num">4</span>Read the regulation</h3>
-                <p>Someone in the crowd calls the records office. The crowd first agrees on two or three words to ask for. The clerk searches 2 CFR 200 on ecfr.gov, pulls the section, and when it is long the crowd says which paragraph to read aloud. The crowd answers from that paragraph, citation and date included.</p>
+                <p>You hand the crowd the number for the records office. The crowd first agrees on two or three words to ask for. The clerk searches 2 CFR 200 on ecfr.gov, pulls the section, and when it is long the crowd says which paragraph to read aloud. The crowd answers from that paragraph, citation and date included.</p>
                 <p>On this page the clerk is the AI4RA MCP server’s eCFR tools. It is the slowest lifeline and the one with the most steps that can fail, and it is the only one whose answer changes when the regulation changes rather than when the crowd does.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Current, cited and checkable to the paragraph.</dd><dt class="is-cost">Cost</dt><dd>Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph.</dd></dl>
               </div>
@@ -317,7 +321,7 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="The card catalog, or the 50:50"><use href="#ll-catalog"/></svg><span class="slide-lifeline">The card catalog, or the 50:50</span></div>
               <div>
                 <h3><span class="how-num">5</span>Vector database</h3>
-                <p>Before the show, 2 CFR 200 was cut into 1,103 passages and each got a card, filed by meaning rather than alphabet (a vector from a small embedding model). Someone files the question the same way, pulls the four closest cards, and the crowd answers from those passages.</p>
+                <p>You hand the crowd a card catalog. Before the show, 2 CFR 200 was cut into 1,103 passages and each got a card, filed by meaning rather than alphabet (a vector from a small embedding model). The crowd files the question the same way, pulls the four closest cards, and answers from those passages.</p>
                 <p>Like the 50:50, it narrows the field rather than answering, and it can leave you with cards that circle the answer without landing on it. The catalog lives in your browser, so nothing leaves it for this step, and it is only as current as the day it was filed.</p>
                 <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Fast, cheap and private: the whole corpus searched by meaning, in your browser.</dd><dt class="is-cost">Cost</dt><dd>Only as current as the day it was built, and a near miss looks like a hit.</dd></dl>
               </div>

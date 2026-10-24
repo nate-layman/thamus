@@ -113,6 +113,7 @@ function expandable(summary, fullText) {
 const state = {};      // id -> {status, answer, kind, trail: Node[], meta}
 let current = 0;       // index into WAYS
 let question = '';
+let ownAnswer = '';
 
 function resetState() {
   for (const w of WAYS) state[w.id] = { status: '', answer: '', kind: 'muted', trail: [], meta: '', ran: false };
@@ -160,6 +161,8 @@ function render(w) {
     $('paste-open').textContent = n ? 'Edit' : 'Paste context';
   }
   const st = state[w.id];
+  $('room-answer').hidden = !ownAnswer;
+  $('room-answer').textContent = ownAnswer ? `Your answer first: ${ownAnswer}` : '';
   $('way-status').textContent = st.status;
   panel.classList.toggle('is-busy', !!st.status);
   const a = $('way-answer');
@@ -423,6 +426,7 @@ async function runEcfr(question) {
 function ask() {
   const q = $('question').value.trim() || $('question').placeholder;
   question = q;
+  ownAnswer = $('your-answer').value.trim();
   $('question').value = q;
   resetState();
   show(WAYS[current].discussion ? 0 : current, true);
@@ -567,6 +571,7 @@ function init() {
   $('ask').addEventListener('click', ask);
   $('method').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
   $('question').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
+  $('your-answer').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
   $('prev').addEventListener('click', () => show(current - 1, true));
   $('rerun').addEventListener('click', () => { state[WAYS[current].id].ran = false; show(current, true); });
   // Arrow keys step through the ways when the focus is not in a text field.
