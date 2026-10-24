@@ -81,7 +81,7 @@ For a machine, Thamus's flaw is the feature. A model that is reminded is a model
 | | Benefits | Costs |
 |---|---|---|
 | **For people** | The record outlasts memory and outlasts us. It can be checked, cited, shared, and corrected. No one should memorize the Code of Federal Regulations, and the rule you memorized in 2023 is wrong today. | What you never learn you cannot judge. Skills you do not use fade. A person who can only answer with the record open cannot tell when the record has failed them. |
-| **For a model** | Answers are current, cited, and checkable. The source can be versioned and shipped with the output. A wrong answer can be traced to a wrong passage rather than to a black box. | Every trip to the record costs time, infrastructure, and a source that has to be right and ready. The lookup can fail, the passage can be the wrong one, and the model can still misread what it is handed. The context window is a page limit. |
+| **For a model** | Answers are current, cited, and checkable. The source can be versioned and shipped with the output. A wrong answer can be traced to a wrong passage rather than to a black box. | Every trip to the record costs time, infrastructure, and a source that has to be right and ready. The trip can fail, the passage can be the wrong one, and the model can still misread what it is handed. The context window is a page limit. |
 
 The two columns of that table are the two directions of the workshop. People need to keep enough in their own heads to judge what the record says. Models need to stop trusting what they remember and read the record every time. Neither direction is optional, and each one makes the other safe.
 
@@ -101,7 +101,7 @@ Good questions to try are the ones whose answers changed in the 2024 revision of
 
 Which do you trust more: someone who remembers everything, or someone who knows where everything is written?
 
-Thamus would say the first. The page is five arguments, and none of them settles it. Before answering, decide what a person has to carry in their own head to tell whether what came back is right. What did the person have to already know to catch the memory answer when it was wrong? What did they have to know to paste the right text, and the right version of it? When the lookup showed its work, who in the room could check it?
+Thamus would say the first. The page is five arguments, and none of them settles it. Before answering, decide what a person has to carry in their own head to tell whether what came back is right. What did the person have to already know to catch the memory answer when it was wrong? What did they have to know to paste the right text, and the right version of it? When the regulation was read out with its citation, who in the room could check it?
 
 ## Running it
 
