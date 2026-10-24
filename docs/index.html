@@ -156,47 +156,42 @@
     <div id="how-modal" class="modal-overlay">
       <div class="modal-dialog modal-wide">
         <h2>How it works</h2>
-        <p>Same model, same question, temperature 0, one system prompt. The only thing that changes is what the model is handed. Under every answer, <em>What the model was handed</em> shows exactly that.</p>
+        <p>Same model, same question, temperature 0, one system prompt. The only thing that changes is what the model is handed. Under every answer on the page, <em>What the model was handed</em> shows exactly that.</p>
 
-        <div class="how-grid">
-          <figure class="how-card">
-            <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /><path d="M17.996 5.125a4 4 0 012.526 5.77" /><path d="M18 18a4 4 0 002-7.465" /><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /><path d="M6 18a4 4 0 01-2-7.465" /><path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></svg></div>
+        <div class="how-rows">
+          <figure class="how-row">
+            <div class="how-tile"><img src="img/crowd-of-amateurs.png" alt="Illustration of a large, diverse crowd of people" loading="lazy" /></div>
             <figcaption>
               <h3><span class="how-num">1</span>No context</h3>
-              <p>The question alone. The model answers from training.</p>
-              <details><summary>More</summary><p>Nothing is looked up. The answer is whatever the model absorbed before its training ended, and it cannot know what changed after that date.</p></details>
+              <p>The model answers from its training alone. Picture a thousand well-read, well-meaning people with no particular expertise. Ask a question and you get back whatever most of them would say, in one confident voice. They have read almost everything ever published and none of your files, they always answer, and the dissenters are averaged away. Nothing is looked up, so the answer cannot know what changed after their reading stopped.</p>
             </figcaption>
           </figure>
-          <figure class="how-card">
+          <figure class="how-row">
             <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 14h10" /><path d="M16 4h2a2 2 0 0 1 2 2v1.344" /><path d="m17 18 4-4-4-4" /><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113" /><rect x="8" y="2" width="8" height="4" rx="1" /></svg></div>
             <figcaption>
               <h3><span class="how-num">2</span>Pasted context</h3>
-              <p>Text you paste. The model reads that and nothing else.</p>
-              <details><summary>More</summary><p>The two fill links fetch the same paragraph of 2 CFR 200.414 as it stands today and as it stood in 2023, so you can watch the model answer from either. You have to know which version you handed it.</p></details>
+              <p>You find the passage and paste it. The model is given the question and that text, nothing else, and answers from it. This is the oldest form of context and the way most people actually use a chat window. The model does not know where the text came from or how old it is; you do. The two fill links in the paste box load 2 CFR 200.414(f) as it reads today and as it read in 2023, so you can watch the model answer faithfully from either.</p>
             </figcaption>
           </figure>
-          <figure class="how-card">
+          <figure class="how-row">
             <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></div>
             <figcaption>
               <h3><span class="how-num">3</span>Web search</h3>
-              <p>The question goes to a search engine. The model gets eight snippets.</p>
-              <details><summary>More</summary><p>The search runs on the AI4RA MCP server&rsquo;s SearXNG metasearch (Google, Bing, DuckDuckGo, Brave and others merged). The model sees titles, addresses and snippets only. No page is read in full.</p></details>
+              <p>The question, as typed, goes to a search engine: a SearXNG metasearch on the AI4RA MCP server that merges Google, Bing, DuckDuckGo, Brave and others. The model is given the top eight results as titles, addresses and snippets. No page is read in full. It answers from the snippets and names the result it relied on.</p>
             </figcaption>
           </figure>
-          <figure class="how-card">
+          <figure class="how-row">
             <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 18v-7" /><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" /><path d="M14 18v-7" /><path d="M18 18v-7" /><path d="M3 22h18" /><path d="M6 18v-7" /></svg></div>
             <figcaption>
               <h3><span class="how-num">4</span>eCFR lookup</h3>
-              <p>The regulation, read live. One paragraph, with a pinpoint citation.</p>
-              <details><summary>More</summary><p>The model picks two or three search words. The AI4RA MCP server&rsquo;s eCFR tools search 2 CFR 200 and fetch the top section; when it is long, the model picks the one paragraph to read. The answer carries the citation and the date of the text in force.</p></details>
+              <p>A live read of the regulation through the AI4RA MCP server. The model turns the question into two or three search words. The server searches 2 CFR 200 on ecfr.gov and fetches the top section, and when the section is long the model picks the one paragraph to read. The model answers from that paragraph, with a pinpoint citation and the date of the text in force. The answer changes when the regulation changes, not when the model does.</p>
             </figcaption>
           </figure>
-          <figure class="how-card">
+          <figure class="how-row">
             <div class="how-tile"><svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></svg></div>
             <figcaption>
               <h3><span class="how-num">5</span>Vector database</h3>
-              <p>2 CFR 200 as 1,103 embedded passages. The nearest four are handed over.</p>
-              <details><summary>More</summary><p>A build script cut the regulation into passages and embedded them with all-MiniLM-L6-v2. Your browser loads the same model once (about 23 MB, then cached), embeds the question, ranks every passage by cosine similarity, and passes the top four to the model. The index is as current as the day it was built.</p></details>
+              <p>Retrieval-augmented generation, as most products do it. A build script cut 2 CFR 200 into 1,103 passages and turned each into a vector with a small embedding model (all-MiniLM-L6-v2). In your browser the same model turns the question into a vector, every passage is scored by cosine similarity, and the four nearest are given to the model. Nothing leaves the browser for this step. The index is only as current as the day it was built.</p>
             </figcaption>
           </figure>
         </div>

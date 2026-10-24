@@ -68,7 +68,12 @@ translation, which is in the public domain.
 ------------------------------------------------------------------------
 Icons
 
-The five method icons in the How it works dialog are from Lucide
+Four of the method icons in the How it works dialog are from Lucide
 (https://lucide.dev), inlined as SVG.
   Copyright (c) 2026 Lucide Icons and Contributors
   ISC License - https://github.com/lucide-icons/lucide/blob/main/LICENSE
+
+docs/img/crowd-of-amateurs.png, the crowd illustration for "No context",
+is carried over from the NCURA Region VI/VII 2026 workshop site by the same
+authors (ui-insight/NCURARegionalWorkshop2026), where it illustrates the
+same idea: a language model as a crowd of well-read non-experts.

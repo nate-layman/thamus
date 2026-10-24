@@ -322,18 +322,21 @@ a { color: inherit; }
   .modal-dialog { padding: 1.4rem 1.2rem; }
 }
 
-/* ── How it works: pictures first ── */
-.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; margin: 1rem 0 1.2rem; }
-.how-card { margin: 0; background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
-.how-tile { display: grid; place-items: center; aspect-ratio: 16 / 9; background: var(--gold-soft); color: var(--ink); border-bottom: 1px solid var(--border); }
-.how-icon { width: 44%; height: auto; max-width: 96px; }
-.how-card figcaption { padding: 0.7rem 0.8rem 0.8rem; font-size: 0.88rem; line-height: 1.45; display: flex; flex-direction: column; gap: 0.35rem; }
-.how-card h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 0.45rem; }
+/* ── How it works: one row per way ── */
+.how-rows { display: flex; flex-direction: column; gap: 0.8rem; margin: 1rem 0 1.2rem; }
+.how-row { margin: 0; display: grid; grid-template-columns: 190px 1fr; gap: 1rem; align-items: center; background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.how-tile { align-self: stretch; display: grid; place-items: center; min-height: 130px; padding: 0.6rem; background: var(--gold-soft); color: var(--ink); border-right: 1px solid var(--border); }
+.how-icon { width: 60%; height: auto; max-width: 96px; }
+.how-tile img { display: block; width: 100%; height: auto; max-height: 150px; object-fit: contain; }
+.how-row figcaption { padding: 0.8rem 1rem 0.8rem 0; font-size: 0.92rem; line-height: 1.5; }
+.how-row h3 { margin: 0 0 0.3rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.45rem; }
 .how-num { flex: none; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--ink); color: var(--gold); font-size: 0.78rem; font-weight: 800; display: grid; place-items: center; }
-.how-card figcaption > p { margin: 0; color: #333; }
-.how-card details { font-size: 0.82rem; color: #444; }
-.how-card details summary { cursor: pointer; color: #7a5a00; font-weight: 700; }
-.how-card details p { margin: 0.3rem 0 0; }
+.how-row figcaption p { margin: 0; color: #333; }
+@media (max-width: 640px) {
+  .how-row { grid-template-columns: 1fr; }
+  .how-tile { border-right: none; border-bottom: 1px solid var(--border); min-height: 110px; }
+  .how-row figcaption { padding: 0 0.9rem 0.9rem; }
+}
 .how-more { margin: 0 0 0.6rem; }
 .how-more > summary { cursor: pointer; font-weight: 700; color: #7a5a00; }
 .how-more .how-list { margin-top: 0.5rem; }
