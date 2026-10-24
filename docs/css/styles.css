@@ -142,6 +142,7 @@ a { color: inherit; }
   cursor: pointer;
 }
 .preset:hover { background: rgba(241, 179, 0, 0.2); border-color: var(--gold); }
+.ecfr-link { text-decoration: none; }
 
 /* ── The current way ── */
 .way {
