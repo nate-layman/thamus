@@ -5,7 +5,7 @@
   "description": "Builds the vector index of 2 CFR 200 that docs/index/ ships, once per backend. Not part of the site.",
   "scripts": {
     "fetch": "python3 fetch_corpus.py",
-    "embed": "node embed_corpus.mjs",
-    "build": "python3 fetch_corpus.py && node embed_corpus.mjs"
+    "embed": "node --env-file-if-exists=../.env embed_corpus.mjs",
+    "build": "python3 fetch_corpus.py && node --env-file-if-exists=../.env embed_corpus.mjs"
   }
 }

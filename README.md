@@ -122,10 +122,10 @@ Then open http://localhost:4173 and paste a key, or pass it once as `?key=...`. 
 **The vector database** is built, not hand-written. `scripts/fetch_corpus.py` fetches the current 2 CFR 200 from the eCFR and cuts it into passages, one per lettered paragraph or defined term, each with its pinpoint citation and a link; `scripts/embed_corpus.mjs` has each backend embed them with its own model and writes `docs/index/`: Qwen3-Embedding-8B on MindRouter (cut to 1,024 dimensions) and gemini-embedding-2 on Gemini (768). The page asks the backend that holds the key to embed the question with the same model and compares it with that backend's vectors, so no model is downloaded to the browser. Both sides read `docs/js/embeddings.js`, so the model, the size and the text around each passage and question cannot drift apart. To rebuild after the regulation changes:
 
 ```bash
-cd scripts && MINDROUTER_API_KEY=mr2_... GEMINI_API_KEY=... npm run build
+cd scripts && npm run build
 ```
 
-With one key set, only that backend's vectors are rebuilt; `node embed_corpus.mjs gemini` rebuilds one by name.
+The build reads `MINDROUTER_API_KEY` and `GEMINI_API_KEY` from the environment or from a `.env` at the repository root, which git ignores. With one key set, only that backend's vectors are rebuilt; `npm run embed -- gemini` rebuilds one by name and keeps the other.
 
 Commit the result. The page shows the date of the eCFR text the index was built from, which is the point: this way is as current as its last build.
 

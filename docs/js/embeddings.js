@@ -92,8 +92,9 @@ async function postJSON(url, headers, body, who, retries = 0) {
       const err = await response.json();
       detail = err.detail || err.error?.message || err.error || '';
     } catch { /* body was not JSON */ }
-    if (response.status === 401 || response.status === 403) throw new Error(`${who} rejected the key for embeddings.`);
-    throw new Error(`${who} embedding error ${response.status}${detail ? ': ' + (typeof detail === 'string' ? detail : JSON.stringify(detail)) : ''}`);
+    const said = detail ? ': ' + (typeof detail === 'string' ? detail : JSON.stringify(detail)) : '';
+    if (response.status === 401 || response.status === 403) throw new Error(`${who} rejected the key for embeddings (${response.status})${said}`);
+    throw new Error(`${who} embedding error ${response.status}${said}`);
   }
 }
 

@@ -36,7 +36,7 @@ A plain static server works for everything except the model calls.
 ## Rebuilding the index
 
 ```bash
-cd scripts && MINDROUTER_API_KEY=mr2_... GEMINI_API_KEY=... npm run build
+cd scripts && npm run build          # or: npm run embed -- gemini, to re-embed one backend
 ```
 
-Fetches the current 2 CFR 200 from the eCFR, cuts it into passages, has each backend whose key is set embed them, and writes `docs/index/`. Keys come from the environment, never from a file in the repo. Commit the result.
+Fetches the current 2 CFR 200 from the eCFR, cuts it into passages, has each backend whose key is set embed them, and writes `docs/index/`. Keys come from the environment or from `.env` at the root (`MINDROUTER_API_KEY`, `GEMINI_API_KEY`), which is gitignored; never commit it. Commit the result.
