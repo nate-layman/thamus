@@ -73,7 +73,8 @@ async function embedGemini(spec, key, texts, options) {
   return rows.map(r => r.values);
 }
 
-// A rate limit or a busy backend is waited out, a few times, before giving up.
+// A short rate limit or a busy backend is waited out, a few times, before giving up.
+// A daily cap is not: no wait inside a page will outlast it, so it is said at once.
 async function postJSON(url, headers, body, who, retries = 0) {
   for (let attempt = 0; ; attempt++) {
     const response = await fetch(url, {
@@ -82,20 +83,38 @@ async function postJSON(url, headers, body, who, retries = 0) {
       body: JSON.stringify(body)
     });
     if (response.ok) return response.json();
+    let err = null;
+    try { err = await response.json(); } catch { /* body was not JSON */ }
+    if (response.status === 429 && isDailyCap(err)) {
+      throw new Error(`This ${who} key's project has used its free embedding requests for today (${dailyLimit(err) || 'the daily limit'}). Try a key from another project, or a MindRouter key.`);
+    }
     if ((response.status === 429 || response.status >= 500) && attempt < retries) {
-      const after = Number(response.headers.get('retry-after'));
-      await new Promise(r => setTimeout(r, (after > 0 ? after : 2 ** attempt * 5) * 1000));
+      const after = Number(response.headers.get('retry-after')) || retryDelay(err);
+      await new Promise(r => setTimeout(r, Math.min(after > 0 ? after : 2 ** attempt * 5, 60) * 1000));
       continue;
     }
-    let detail = '';
-    try {
-      const err = await response.json();
-      detail = err.detail || err.error?.message || err.error || '';
-    } catch { /* body was not JSON */ }
+    const detail = err ? (err.detail || err.error?.message || err.error || '') : '';
     const said = detail ? ': ' + (typeof detail === 'string' ? detail : JSON.stringify(detail)) : '';
     if (response.status === 401 || response.status === 403) throw new Error(`${who} rejected the key for embeddings (${response.status})${said}`);
     throw new Error(`${who} embedding error ${response.status}${said}`);
   }
+}
+
+// Gemini names the quota it refused under: a per-day id is the free tier's daily cap.
+function violations(err) {
+  return (err?.error?.details || []).flatMap(d => d.violations || []);
+}
+function isDailyCap(err) {
+  return violations(err).some(v => /PerDay/i.test(v.quotaId || ''));
+}
+function dailyLimit(err) {
+  const v = violations(err).find(v => /PerDay/i.test(v.quotaId || ''));
+  return v && v.quotaValue ? `${Number(v.quotaValue).toLocaleString()} a day` : '';
+}
+// Seconds from Gemini's RetryInfo, such as "23s".
+function retryDelay(err) {
+  const d = (err?.error?.details || []).find(d => d.retryDelay);
+  return d ? parseFloat(d.retryDelay) || 0 : 0;
 }
 
 function normalize(values, dims) {
