@@ -10,15 +10,16 @@ A static teaching page for the AI4RA workshops at the University of Idaho. One r
   - `js/app.js` the five columns and their prompts
   - `js/api.js` the model bridge: `mr2_` keys go to MindRouter through the lakehouse proxy, other keys to Gemini
   - `js/mcp.js`, `js/ecfr-lookup.js`, `js/web-search.js` calls to the AI4RA MCP server (no key, any origin)
-  - `js/vector-index.js` loads `docs/index/` and the embedding model in the browser (transformers.js)
-  - `index/` the passages of 2 CFR 200 and their vectors, built, not hand-edited
+  - `js/embeddings.js` the embedding model, size and query and passage text for each backend; the page and the build both import it
+  - `js/vector-index.js` loads `docs/index/`, has the backend embed the question, and ranks the passages in the browser
+  - `index/` the passages of 2 CFR 200 and one vector file per backend, built, not hand-edited
 - `scripts/` builds the index (`fetch_corpus.py`, then `embed_corpus.mjs`) and serves the site locally with a `/v1` proxy (`serve.py`). `node_modules/` stays out of git.
 - Root: README (the essay), LICENSE (Apache 2.0, code), LICENSE-CONTENT.md (CC BY 4.0, text), NOTICE, CITATION.cff.
 
 ## Rules
 
 - Every column asks the same model the same way. Only what it is handed differs. Keep it that way; the comparison is the lesson.
-- The query vector and the passage vectors must come from the same model and quantization. Change one, rebuild the other.
+- The query vector and the passage vectors must come from the same model, size and wrapping text. All three live in `docs/js/embeddings.js`; change one, rebuild that backend's vectors.
 - Never commit a key. The workshop key travels on the QR code's URL and lives in sessionStorage.
 - No em dashes in prose. Use commas, periods, or "and".
 - Sibling repos (data-crawler-carl, promptulus, ai4ra-mcp, NCURARegionalWorkshop2026) are read-only context.
@@ -35,7 +36,7 @@ A plain static server works for everything except the model calls.
 ## Rebuilding the index
 
 ```bash
-cd scripts && npm install && npm run build
+cd scripts && MINDROUTER_API_KEY=mr2_... GEMINI_API_KEY=... npm run build
 ```
 
-Fetches the current 2 CFR 200 from the eCFR, cuts it into passages, embeds them, and writes `docs/index/`. Commit the result.
+Fetches the current 2 CFR 200 from the eCFR, cuts it into passages, has each backend whose key is set embed them, and writes `docs/index/`. Keys come from the environment, never from a file in the repo. Commit the result.

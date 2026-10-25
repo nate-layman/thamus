@@ -66,7 +66,7 @@ The remedy is the one Thamus refused. Give the model the written record and let 
 | 2 | **Pasted context** | Whatever you put in the text box, and nothing else. You did the reading. | You know exactly what it read. | You have to find the right text, and the right version, yourself. |
 | 3 | **Web search** | The question goes to a search engine as typed. The model gets eight titles, addresses and snippets, and reads no page in full. | Reaches anything public, including what changed last week. | Anyone's page, any year. The model referees sources it cannot judge. |
 | 4 | **API call** | The model turns the question into search words, a Model Context Protocol server searches the eCFR, and the model reads the one paragraph that bears on the question, with a pinpoint citation such as 2 CFR 200.414(f). | Current, cited and checkable to the paragraph. The answer changes when the regulation changes, not when the model does. | Slowest and most fragile: several calls, each of which can fail or read the wrong paragraph. |
-| 5 | **Vector database** | 2 CFR 200 cut into 1,103 passages and embedded. The browser embeds the question with the same model, ranks every passage by cosine similarity, and hands over the nearest four. This is what most products call retrieval-augmented generation. | Fast, cheap and private: the whole corpus searched by meaning, in your browser. | Only as current as the day the index was built, and a near miss looks like a hit. |
+| 5 | **Vector database** | 2 CFR 200 cut into 1,103 passages and embedded. The backend embeds the question with the same model, the browser ranks every passage by cosine similarity, and hands over the nearest four. This is what most products call retrieval-augmented generation. | Fast and cheap: the whole corpus searched by meaning, the ranking done in your browser. | Only as current as the day the index was built, and a near miss looks like a hit. |
 
 For a machine, Thamus's flaw is the feature. A model that is reminded is a model that can be checked. Under every answer the page shows exactly what the model was handed: the system prompt, the pasted text, the search results, the trail of eCFR calls and the paragraph that came back, or the passages and their scores.
 
@@ -107,7 +107,7 @@ Thamus would say the first. The page is five arguments, and none of them settles
 
 The page is static and runs in the browser, like [Data Crawler Carl](https://github.com/ui-insight/data-crawler-carl) and [Promptulus](https://github.com/AI4RA/promptulus), whose shell it borrows. GitHub Pages serves `docs/` from `main` through `.github/workflows/pages.yml`.
 
-**The key.** The ways that ask a model need one. A University of Idaho MindRouter key (prefix `mr2_`) routes the model calls through the AI4RA lakehouse proxy to the University's own models. Any other key is treated as a Google Gemini key and goes to Google. The key is held in sessionStorage, scoped to the tab, cleared when it closes, and never stored in this site's source. Facilitators pre-fill it by sharing a link with `?key=YOUR_KEY` appended, which the page reads once and strips from the address bar. Reading the regulation, the web search and the vector database need no key: the first two go to the hosted [ai4ra-mcp](https://github.com/ui-insight/ai4ra-mcp) server, which allows any origin and logs no keys, and the third runs entirely in the browser.
+**The key.** The ways that ask a model need one. A University of Idaho MindRouter key (prefix `mr2_`) routes the model calls through the AI4RA lakehouse proxy to the University's own models. Any other key is treated as a Google Gemini key and goes to Google. The key is held in sessionStorage, scoped to the tab, cleared when it closes, and never stored in this site's source. Facilitators pre-fill it by sharing a link with `?key=YOUR_KEY` appended, which the page reads once and strips from the address bar. Reading the regulation and the web search need no key of their own: they go to the hosted [ai4ra-mcp](https://github.com/ui-insight/ai4ra-mcp) server, which allows any origin and logs no keys. The vector database uses the same key as the model: the backend that answers also embeds the question.
 
 **On a laptop:**
 
@@ -119,11 +119,13 @@ Then open http://localhost:4173 and paste a key, or pass it once as `?key=...`. 
 
 **The proxy's allowlist.** Browser calls to the lakehouse proxy succeed only from origins its Caddy config names. If the live page says "Could not reach MindRouter (Load failed)", the origin is missing from the host's Caddy config. The allowlist is the three Pages origins the AI4RA apps live on: ai4ra.github.io, ui-insight.github.io and nate-layman.github.io. Host configuration is kept out of this repository (`deploy/` is ignored).
 
-**The vector database** is built, not hand-written. `scripts/fetch_corpus.py` fetches the current 2 CFR 200 from the eCFR and cuts it into passages, one per lettered paragraph or defined term, each with its pinpoint citation and a link; `scripts/embed_corpus.mjs` embeds them with all-MiniLM-L6-v2 through transformers.js and writes `docs/index/`. The page loads the same model in the browser (about 23 MB once, then cached) so that query vectors and passage vectors agree. To rebuild after the regulation changes:
+**The vector database** is built, not hand-written. `scripts/fetch_corpus.py` fetches the current 2 CFR 200 from the eCFR and cuts it into passages, one per lettered paragraph or defined term, each with its pinpoint citation and a link; `scripts/embed_corpus.mjs` has each backend embed them with its own model and writes `docs/index/`: Qwen3-Embedding-8B on MindRouter (cut to 1,024 dimensions) and gemini-embedding-2 on Gemini (768). The page asks the backend that holds the key to embed the question with the same model and compares it with that backend's vectors, so no model is downloaded to the browser. Both sides read `docs/js/embeddings.js`, so the model, the size and the text around each passage and question cannot drift apart. To rebuild after the regulation changes:
 
 ```bash
-cd scripts && npm install && npm run build
+cd scripts && MINDROUTER_API_KEY=mr2_... GEMINI_API_KEY=... npm run build
 ```
+
+With one key set, only that backend's vectors are rebuilt; `node embed_corpus.mjs gemini` rebuilds one by name.
 
 Commit the result. The page shows the date of the eCFR text the index was built from, which is the point: this way is as current as its last build.
 
@@ -136,10 +138,10 @@ No sponsored project data, PII, or restricted information should be entered; the
 - Betsy Sparrow, Jenny Liu and Daniel M. Wegner, "Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips," *Science* 333 (2011): 776 to 778.
 - Vannevar Bush, "As We May Think," *The Atlantic*, July 1945. The memex, the original argument for reminding machines as an aid to human memory rather than a replacement for it.
 - 2 CFR Part 200, Uniform Administrative Requirements, Cost Principles, and Audit Requirements for Federal Awards, as revised effective October 1, 2024, read from the eCFR at https://www.ecfr.gov.
-- Nils Reimers and Iryna Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," *EMNLP* 2019. The family the embedding model, all-MiniLM-L6-v2, belongs to.
+- Nils Reimers and Iryna Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," *EMNLP* 2019. The idea behind the vector database: a sentence as a point, and nearness as meaning.
 
 ## Authors and license
 
-Nathan Layman and Bert Baumgaertner, University of Idaho. The code is licensed under the [Apache License 2.0](LICENSE) and the text under [CC BY 4.0](LICENSE-CONTENT.md), the same terms as the workshop it belongs to. [NOTICE](NOTICE) carries the attributions and the third-party credits: transformers.js and the all-MiniLM-L6-v2 model (Apache-2.0), the Google Gen AI SDK (Apache-2.0, loaded only with a Gemini key), and the AI4RA MCP server. To cite the project, use [CITATION.cff](CITATION.cff).
+Nathan Layman and Bert Baumgaertner, University of Idaho. The code is licensed under the [Apache License 2.0](LICENSE) and the text under [CC BY 4.0](LICENSE-CONTENT.md), the same terms as the workshop it belongs to. [NOTICE](NOTICE) carries the attributions and the third-party credits: the Google Gen AI SDK (Apache-2.0, loaded only with a Gemini key), and the AI4RA MCP server. To cite the project, use [CITATION.cff](CITATION.cff).
 
 Remembering Thamus is a project of [AI4RA](https://github.com/AI4RA) at the University of Idaho. This material is based upon work supported by the National Science Foundation under the GRANTED program, [NSF Award #2427549](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2427549), "Crossing the Innovation Valley of Death: Democratizing Data and Artificial Intelligence for Research Administration." Any opinions, findings, conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.

@@ -3,9 +3,10 @@
 // nothing, a passage you pasted, search-engine snippets, the nearest passages from a
 // vector index of 2 CFR 200, or the one eCFR paragraph a live lookup read.
 import { getKey, setKey, readKeyFromURL, wasKeyLoadedFromURL } from './key-manager.js';
-import { initAPI, hasAPIKey, callModel, backendName, currentModel, isMindRouterKey } from './api.js';
+import { initAPI, hasAPIKey, callModel, backendName, currentModel, isMindRouterKey, embeddingBackend, embedQuery } from './api.js';
 import { webSearch, formatResults } from './web-search.js';
-import { retrieve, loadModel, indexInfo, formatPassages } from './vector-index.js';
+import { retrieve, warm, indexInfo, formatPassages } from './vector-index.js';
+import { BACKENDS } from './embeddings.js';
 import * as ecfr from './ecfr-lookup.js';
 import { callMCPTool } from './mcp.js';
 
@@ -63,7 +64,7 @@ const WAYS = [
     id: 'vector',
     title: 'Vector database',
     sub: '2 CFR 200 as embedded passages. The nearest four are handed over.',
-    benefit: 'Fast, cheap and private: the whole corpus searched by meaning, in your browser.',
+    benefit: 'Fast and cheap: the whole corpus searched by meaning, the ranking done in your browser.',
     cost: 'Only as current as the day it was built, and a near miss looks like a hit.',
     watch: 'The index is close. It often lands near the right passage without landing on it, and the answer is a blend of what it found and what it remembered. The similarity scores are right there.',
     run: runVector
@@ -332,10 +333,12 @@ async function runWeb(question) {
 
 async function runVector(question) {
   setStatus('vector', 'Embedding the question and ranking 1,103 passages…');
-  const passages = await retrieve(question, 4, vectorProgress);
+  const backend = embeddingBackend();
+  const passages = await retrieve(question, backend, embedQuery, 4);
   const info = await indexInfo();
+  const spec = BACKENDS[backend];
   const trail = [
-    el('p', { class: 'trail-note', text: `The question was embedded with ${info.embedding.model.replace(/^.*\//, '')} in this browser and compared with every passage of 2 CFR 200 (eCFR text current as of ${info.source_date}). The four nearest, by cosine similarity, were handed over in this order.` }),
+    el('p', { class: 'trail-note', text: `${spec.label} embedded the question with ${spec.model.replace(/^.*\//, '')}, the model that embedded every passage of 2 CFR 200 (eCFR text current as of ${info.source_date}). This browser compared the question's ${spec.dims} numbers with each passage's and handed over the four nearest, by cosine similarity, in this order.` }),
     el('ol', { class: 'trail-list' }, passages.map(p => el('li', {}, [
       link(p.url, p.pin),
       el('span', { class: 'trail-score', text: ' ' + p.score.toFixed(3) }),
@@ -435,33 +438,25 @@ function ask() {
   $('way').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ── The embedding model's one-time download ── */
+/* ── The index, loaded ahead of the first question ── */
 
-const progressFiles = {};
-let vectorReady = false;
-function vectorProgress(p) {
-  if (!p || !p.file) return;
-  if (p.status === 'progress') progressFiles[p.file] = { loaded: p.loaded || 0, total: p.total || 0 };
-  if (p.status === 'done') progressFiles[p.file] = { loaded: p.total || 1, total: p.total || 1, done: true };
-  const all = Object.values(progressFiles);
-  const total = all.reduce((n, f) => n + f.total, 0);
-  const loaded = all.reduce((n, f) => n + f.loaded, 0);
-  if (total && !vectorReady) {
-    setStatus('vector', `Loading the embedding model in this browser, once: ${Math.round(100 * loaded / total)}% of ${(total / 1048576).toFixed(0)} MB…`);
-  }
-}
-
+// Load the passages and the vectors for the backend the key belongs to. Nothing is
+// embedded until a question is asked.
 async function warmVector() {
+  if (state.vector.ran) return;
+  if (!hasAPIKey()) {
+    setAnswer('vector', 'The vectors load once a key is set: each backend embedded the passages with its own model.', 'muted');
+    return;
+  }
+  const backend = embeddingBackend();
   try {
     setStatus('vector', 'Loading the index…');
-    const info = await indexInfo();
-    await loadModel(vectorProgress);
-    vectorReady = true;
+    const { meta, info } = await warm(backend);
     setStatus('vector', '');
-    if (!state.vector.ran) setAnswer('vector', `Ready: ${info.embedding.count.toLocaleString()} passages of 2 CFR 200, eCFR text current as of ${info.source_date}, embedded with ${info.embedding.model.replace(/^.*\//, '')}.`, 'muted');
+    if (!state.vector.ran) setAnswer('vector', `Ready: ${info.count.toLocaleString()} passages of 2 CFR 200, eCFR text current as of ${meta.source_date}, embedded by ${BACKENDS[backend].label} with ${info.model.replace(/^.*\//, '')}.`, 'muted');
   } catch (e) {
     setStatus('vector', '');
-    setAnswer('vector', 'The embedding model could not load: ' + e.message, 'error');
+    setAnswer('vector', e.message, 'error');
   }
 }
 
@@ -527,6 +522,7 @@ function wireKey() {
     setKey(val);
     initAPI(val);
     updateKeyStatus();
+    warmVector();
   });
   $('api-key-input').addEventListener('keydown', e => { if (e.key === 'Enter') $('api-key-save').click(); });
   $('api-key-clear').addEventListener('click', () => {
@@ -582,7 +578,7 @@ function init() {
     openModal('key-modal');
   }
 
-  // Start the one-time download of the embedding model while people read the page.
+  // Load the index while people read the page.
   setTimeout(warmVector, 800);
 }
 

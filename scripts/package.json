@@ -2,13 +2,10 @@
   "name": "thamus-index-builder",
   "private": true,
   "type": "module",
-  "description": "Builds the vector index of 2 CFR 200 that docs/index/ ships. Not part of the site.",
+  "description": "Builds the vector index of 2 CFR 200 that docs/index/ ships, once per backend. Not part of the site.",
   "scripts": {
     "fetch": "python3 fetch_corpus.py",
     "embed": "node embed_corpus.mjs",
     "build": "python3 fetch_corpus.py && node embed_corpus.mjs"
-  },
-  "dependencies": {
-    "@huggingface/transformers": "4.3.1"
   }
 }

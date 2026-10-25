@@ -9,10 +9,12 @@
 // Every column of the page asks the same model the same way: the model's default
 // settings, one system prompt, one user message. Only what the model is handed differs.
 
+import { embedTexts, MINDROUTER_PUBLIC_URL } from './embeddings.js';
+
 const LOCAL = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 // On a laptop, scripts/serve.py serves docs/ and proxies /v1/* to MindRouter, because
 // the public proxy only allows the published origins.
-export const MINDROUTER_BASE_URL = LOCAL ? '/v1' : 'https://nlayman-external.insight.uidaho.edu/v1';
+export const MINDROUTER_BASE_URL = LOCAL ? '/v1' : MINDROUTER_PUBLIC_URL;
 export const MINDROUTER_MODEL = 'qwen/qwen3.8-27b';
 export const GEMINI_MODEL = 'gemini-3.8-flash';
 
@@ -37,6 +39,18 @@ export function backendName(key) {
 // One model per backend, fixed. There is no picker: the comparison is between ways, not models.
 export function currentModel() {
   return isMindRouterKey(apiKey) ? MINDROUTER_MODEL : GEMINI_MODEL;
+}
+
+// Which backend's embedding model the vector column asks, by the key it holds.
+export function embeddingBackend() {
+  return isMindRouterKey(apiKey) ? 'mindrouter' : 'gemini';
+}
+
+// One text, already wrapped for the backend, embedded by that backend's model.
+export async function embedQuery(text) {
+  if (!apiKey) throw new Error('No key is set. Paste a MindRouter or Gemini key first.');
+  const [v] = await embedTexts(embeddingBackend(), apiKey, [text], { baseUrl: MINDROUTER_BASE_URL, retries: 1 });
+  return v;
 }
 
 /**

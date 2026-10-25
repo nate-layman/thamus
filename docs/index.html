@@ -322,9 +322,9 @@
               <div class="slide-icon"><svg class="lifeline" viewBox="0 0 200 140" role="img" aria-label="The card catalog, or the 50:50"><use href="#ll-catalog"/></svg><span class="slide-lifeline">The card catalog, or the 50:50</span></div>
               <div>
                 <h3><span class="how-num">5</span>Vector database</h3>
-                <p>You hand the crowd a card catalog. Before the show, 2 CFR 200 was cut into 1,103 passages and each got a card, filed by meaning rather than alphabet (a vector from a small embedding model). The crowd files the question the same way, pulls the four closest cards, and answers from those passages.</p>
-                <p>Like the 50:50, it narrows the field rather than answering, and it can leave you with cards that circle the answer without landing on it. The catalog lives in your browser, so nothing leaves it for this step, and it is only as current as the day it was filed.</p>
-                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Fast, cheap and private: the whole corpus searched by meaning, in your browser.</dd><dt class="is-cost">Cost</dt><dd>Only as current as the day it was built, and a near miss looks like a hit.</dd></dl>
+                <p>You hand the crowd a card catalog. Before the show, 2 CFR 200 was cut into 1,103 passages and each got a card, filed by meaning rather than alphabet (a vector from an embedding model). The crowd files the question the same way, pulls the four closest cards, and answers from those passages.</p>
+                <p>Like the 50:50, it narrows the field rather than answering, and it can leave you with cards that circle the answer without landing on it. The catalog lives in your browser; only the question goes out, to be filed by the same model that filed the cards. It is only as current as the day it was filed.</p>
+                <dl class="slide-tradeoff"><dt class="is-benefit">Benefit</dt><dd>Fast and cheap: the whole corpus searched by meaning, the ranking done in your browser.</dd><dt class="is-cost">Cost</dt><dd>Only as current as the day it was built, and a near miss looks like a hit.</dd></dl>
               </div>
             </div>
           </section>
@@ -348,7 +348,7 @@
           <ul class="how-list">
             <li>Your question and the retrieved text go to the model&rsquo;s gateway: the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy with an <code>mr2_</code> key, or Google with a Gemini key.</li>
             <li>Your question goes to the AI4RA MCP server for the web search and for reading the regulation. The server keeps no keys and logs none.</li>
-            <li>Nothing leaves for the vector database step. The embedding runs in your browser.</li>
+            <li>For the vector database, your question goes to the same gateway to be embedded, by the model that embedded the passages. The passages and the ranking stay in your browser.</li>
           </ul>
           <p>Same model, same question, default settings, one system prompt, every time; under every answer on the page, <em>What the model was handed</em> shows exactly what came back. This is a static page on GitHub Pages with no server of its own. Source, build scripts and the index are on <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener">GitHub</a>; the MCP server is <a href="https://github.com/ui-insight/ai4ra-mcp" target="_blank" rel="noopener">ai4ra-mcp</a>.</p>
         </details>

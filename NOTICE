@@ -37,21 +37,13 @@ The eCFR lookup is adapted from the NCURA Region VI/VII 2026 workshop site
 
 docs/index/ holds passages of 2 CFR Part 200 fetched from the eCFR
 (https://www.ecfr.gov), a work of the United States Government in the
-public domain, with vectors computed from them.
+public domain, with vectors computed from them by the embedding models
+the two backends serve (Qwen3-Embedding-8B through MindRouter, and
+gemini-embedding-2 through the Gemini API).
 
 The site loads the following open source software in the browser from
 public CDNs. Each remains under its own license and copyright; none is
 modified or redistributed by this project.
-
-Transformers.js, @huggingface/transformers 4.3.1 (sentence embeddings in the browser)
-  Copyright 2023-present Hugging Face
-  Apache License 2.0 - https://github.com/huggingface/transformers.js/blob/main/LICENSE
-  It loads ONNX Runtime Web (MIT, Microsoft) as part of its bundle.
-
-all-MiniLM-L6-v2, as Xenova/all-MiniLM-L6-v2 (the embedding model, fetched
-from the Hugging Face Hub at run time and at build time)
-  Copyright the Sentence-Transformers authors (Nils Reimers and Iryna Gurevych)
-  Apache License 2.0 - https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
 
 @google/genai (Google Gen AI JavaScript SDK, loaded only when a Gemini key is used)
   Copyright 2025 Google LLC

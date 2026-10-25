@@ -1,67 +1,74 @@
-// The vector database column. scripts/ cut 2 CFR 200 into passages and embedded them
-// with a small sentence-embedding model; the page loads the same model in the browser
-// (through transformers.js, about 23 MB once, then cached), embeds the question, and
-// ranks every passage by cosine similarity. Nothing leaves the browser for this step.
-// This is what most products call retrieval-augmented generation.
+// The vector database column. scripts/ cut 2 CFR 200 into passages and had each
+// backend embed them; docs/index/ holds the passages and one file of vectors per
+// backend. The page asks the backend that holds the key to embed the question (the
+// same model that embedded the passages), then ranks every passage by cosine
+// similarity here, in the browser. No model is downloaded. This is what most
+// products call retrieval-augmented generation.
+import { BACKENDS } from './embeddings.js';
 
-export const TRANSFORMERS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.1/dist/transformers.min.js';
 export const INDEX_URL = 'index/chunks.json';
 
-let indexPromise = null;
-let modelPromise = null;
+let metaPromise = null;
+const vectorPromises = {};
 
-function loadIndex() {
-  if (!indexPromise) {
-    indexPromise = (async () => {
-      const meta = await (await fetch(INDEX_URL)).json();
-      if (!meta.embedding) throw new Error('The index has no embeddings. Run scripts/embed_corpus.mjs.');
-      const binUrl = INDEX_URL.replace(/[^/]*$/, meta.embedding.file);
-      const buf = await (await fetch(binUrl)).arrayBuffer();
-      const vectors = new Float32Array(buf);
-      const { dims, count } = meta.embedding;
-      if (vectors.length !== dims * count) throw new Error('embeddings.bin does not match chunks.json.');
-      return { meta, vectors, dims, count };
-    })();
-    indexPromise.catch(() => { indexPromise = null; });
+function loadMeta() {
+  if (!metaPromise) {
+    metaPromise = fetch(INDEX_URL).then(r => {
+      if (!r.ok) throw new Error(`Could not load the index (${r.status}).`);
+      return r.json();
+    });
+    metaPromise.catch(() => { metaPromise = null; });
   }
-  return indexPromise;
+  return metaPromise;
 }
 
-/**
- * Load the embedding model in the browser. onProgress gets {status, file, progress}
- * from transformers.js, and is how the page shows the one-time download.
- */
-export function loadModel(onProgress) {
-  if (!modelPromise) {
-    modelPromise = (async () => {
-      const index = await loadIndex();
-      const { pipeline, env } = await import(TRANSFORMERS_URL);
-      env.allowLocalModels = false;
-      const { model, dtype } = index.meta.embedding;
-      const embed = await pipeline('feature-extraction', model, { dtype, progress_callback: onProgress });
-      return { embed, index };
+/** The index's record for a backend's vectors, or null when they have not been built. */
+export async function embeddingInfo(backend) {
+  const meta = await loadMeta();
+  return (meta.embeddings && meta.embeddings[backend]) || null;
+}
+
+function loadVectors(backend) {
+  if (!vectorPromises[backend]) {
+    vectorPromises[backend] = (async () => {
+      const meta = await loadMeta();
+      const info = meta.embeddings && meta.embeddings[backend];
+      if (!info) throw new Error(`The index has no ${BACKENDS[backend].label} vectors yet. Run scripts/embed_corpus.mjs with that key.`);
+      if (info.model !== BACKENDS[backend].model || info.dims !== BACKENDS[backend].dims) {
+        throw new Error(`The ${BACKENDS[backend].label} vectors were built with ${info.model} at ${info.dims} dims, not the ${BACKENDS[backend].model} the page asks. Rebuild them.`);
+      }
+      const buf = await (await fetch(INDEX_URL.replace(/[^/]*$/, info.file))).arrayBuffer();
+      const vectors = new Float32Array(buf);
+      if (vectors.length !== info.dims * info.count) throw new Error(`${info.file} does not match chunks.json.`);
+      return { meta, info, vectors };
     })();
-    modelPromise.catch(() => { modelPromise = null; });
+    vectorPromises[backend].catch(() => { delete vectorPromises[backend]; });
   }
-  return modelPromise;
+  return vectorPromises[backend];
+}
+
+/** Load the index and a backend's vectors ahead of the first question. */
+export async function warm(backend) {
+  const { meta, info } = await loadVectors(backend);
+  return { meta, info };
 }
 
 export function indexInfo() {
-  return loadIndex().then(i => i.meta);
-}
-
-export function isReady() {
-  return !!modelPromise;
+  return loadMeta();
 }
 
 /**
- * Embed the question and return the k nearest passages with their scores.
+ * Embed the question with the backend and return the k nearest passages with their scores.
+ * @param {string} question
+ * @param {'mindrouter'|'gemini'} backend
+ * @param {(text: string) => Promise<Float32Array>} embedQuery  embeds one already-wrapped text
  */
-export async function retrieve(question, k = 4, onProgress) {
-  const { embed, index } = await loadModel(onProgress);
-  const t = await embed([question], { pooling: 'mean', normalize: true });
-  const q = t.data;
-  const { vectors, dims, count, meta } = index;
+export async function retrieve(question, backend, embedQuery, k = 4) {
+  const [{ meta, info, vectors }, q] = await Promise.all([
+    loadVectors(backend),
+    embedQuery(BACKENDS[backend].query(question))
+  ]);
+  const { dims, count } = info;
   const scores = new Float32Array(count);
   for (let r = 0; r < count; r++) {
     let s = 0;
