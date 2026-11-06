@@ -8,6 +8,8 @@ Ask a research compliance question five ways, one at a time: from the model's me
 
 Part of [AI4RA](https://ai4ra.uidaho.edu) at the University of Idaho.
 
+**Discuss:** tell us what you think on the [AI4RA community on Groups.io](https://groups.ai4ra.uidaho.edu/g/main). Join the [#AILiteracy](https://groups.ai4ra.uidaho.edu/g/main/search?q=%23AILiteracy&ct=1) conversation, or start a new topic with #AILiteracy in the subject line.
+
 ## The story
 
 In Plato's *Phaedrus*, Socrates tells a story about an Egyptian god named Theuth, the inventor of number, geometry, astronomy, and letters. Theuth brings his inventions to Thamus, the king, and argues for each one. When he comes to writing he makes his strongest claim:

@@ -254,6 +254,10 @@ a { color: inherit; }
 #paste-text:focus { border-color: var(--gold); }
 .paste-tools { display: flex; gap: 0.9rem; flex-wrap: wrap; align-items: center; margin-top: 0.5rem; }
 
+.community { max-width: 56rem; margin: 1.5rem auto 0; padding: 1rem 1.3rem; background: #fff8e1; border: 1px solid rgba(245, 196, 66, 0.55); border-radius: 12px; text-align: center; }
+.community h2 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.3rem; }
+.community p { font-size: 0.95rem; color: #333; }
+.community a { color: #7a5a00; font-weight: 700; }
 .app-footer { max-width: 56rem; margin: 2rem auto 0; font-size: 0.8rem; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 0.4rem; }
 .app-footer a { color: #7a5a00; font-weight: 600; }
 
