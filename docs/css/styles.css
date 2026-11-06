@@ -258,7 +258,7 @@ a { color: inherit; }
 .community h2 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.3rem; }
 .community p { font-size: 0.95rem; color: #333; }
 .community a { color: #7a5a00; font-weight: 700; }
-.app-footer { max-width: 56rem; margin: 2rem auto 0; font-size: 0.8rem; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 0.4rem; }
+.app-footer { max-width: 56rem; margin: 2.5rem auto 0; padding: 1rem 0 1.5rem; border-top: 1px solid var(--border); font-size: 0.75rem; line-height: 1.6; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 0.4rem; }
 .app-footer a { color: #7a5a00; font-weight: 600; }
 
 /* ── Toast ── */
