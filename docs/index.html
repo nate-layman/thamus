@@ -14,6 +14,7 @@
       <div class="app-header-actions">
         <button class="about-btn" data-open="story-modal">The story</button>
         <button class="about-btn" data-open="how-modal">How it works</button>
+        <button class="about-btn" data-open="discussion-modal">Discussion</button>
         <a href="https://github.com/nate-layman/thamus" target="_blank" rel="noopener" class="about-btn">GitHub</a>
         <button id="api-key-btn" class="api-key-btn" data-open="key-modal">
           <span class="api-key-dot" id="api-key-dot"></span>
@@ -51,10 +52,15 @@
         </header>
 
         <div id="way-body">
-          <div id="paste-box" class="paste-line" hidden>
-            <span id="paste-summary">Nothing pasted yet.</span>
-            <button id="paste-open" type="button" class="ask-btn small" data-open="paste-modal">Paste context</button>
-            <a class="preset ecfr-link" href="https://www.ecfr.gov/current/title-2/section-200.414#p-200.414(f)" target="_blank" rel="noopener">200.414(f) on eCFR</a>
+          <div id="paste-box" class="paste-box" hidden>
+            <label for="paste-text">The model gets this and nothing else. Paste a passage from ecfr.gov, a sponsor&rsquo;s policy page, an award letter.</label>
+            <textarea id="paste-text" rows="5" placeholder="Paste a passage here, then press Ask."></textarea>
+            <div class="paste-tools">
+              <button id="paste-fill-current" type="button" class="link-btn">Fill with today&rsquo;s 200.414(f)</button>
+              <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
+              <button id="paste-clear" type="button" class="link-btn">Clear</button>
+              <a class="preset ecfr-link" href="https://www.ecfr.gov/current/title-2/section-200.414#p-200.414(f)" target="_blank" rel="noopener">200.414(f) on eCFR</a>
+            </div>
           </div>
           <p id="room-answer" class="room-answer" hidden></p>
           <p id="way-status" class="way-status"></p>
@@ -71,19 +77,10 @@
           </dl>
         </div>
 
-        <div id="way-end" class="way-end" hidden>
-          <p class="discussion-q">Which do you trust more: someone who remembers everything, or someone who knows where everything is written?</p>
-          <p>Thamus would say the first. You have just watched five arguments, and none of them settles it. Whichever lifeline you used, you are the one who says final answer. Before you give it, decide what a person has to carry in their own head to tell whether what came back is right.</p>
-          <ul class="end-list">
-            <li>What did the person have to already know to catch the memory answer when it was wrong?</li>
-            <li>What did they have to know to paste the right text, and the right version of it?</li>
-            <li>When the regulation was read out with its citation, who could check it?</li>
-          </ul>
-        </div>
-
         <div class="way-nav">
           <button id="prev" type="button" class="nav-btn">&larr; Previous</button>
           <button id="rerun" type="button" class="link-btn">Run again</button>
+          <button id="next" type="button" class="nav-btn">Next &rarr;</button>
         </div>
       </section>
 
@@ -96,17 +93,17 @@
     <div id="toast" class="toast" role="status"></div>
 
     <!-- Pasted context -->
-    <div id="paste-modal" class="modal-overlay">
+    <div id="discussion-modal" class="modal-overlay">
       <div class="modal-dialog modal-wide">
-        <h2>Pasted context</h2>
-        <p>The model gets this and nothing else. Paste a passage from ecfr.gov, a sponsor&rsquo;s policy page, an award letter.</p>
-        <textarea id="paste-text" rows="12" placeholder="Paste a passage here."></textarea>
-        <div class="paste-tools">
-          <button id="paste-fill-current" type="button" class="link-btn">Fill with today&rsquo;s 200.414(f)</button>
-          <button id="paste-fill-old" type="button" class="link-btn">Fill with the 2023 text</button>
-          <button id="paste-clear" type="button" class="link-btn">Clear</button>
-        </div>
-        <button id="paste-run" class="modal-close-btn">Ask with this text</button>
+        <h2>Discussion</h2>
+          <p class="discussion-q">Which do you trust more: someone who remembers everything, or someone who knows where everything is written?</p>
+          <p>Thamus would say the first. The five ways are five arguments, and none of them settles it. Whichever lifeline you used, you are the one who says final answer. Before you give it, decide what a person has to carry in their own head to tell whether what came back is right.</p>
+          <ul class="end-list">
+            <li>What did the person have to already know to catch the memory answer when it was wrong?</li>
+            <li>What did they have to know to paste the right text, and the right version of it?</li>
+            <li>When the regulation was read out with its citation, who could check it?</li>
+          </ul>
+        <button class="modal-close-btn" data-close="discussion-modal">Done</button>
       </div>
     </div>
 

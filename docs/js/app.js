@@ -68,12 +68,6 @@ const WAYS = [
     cost: 'Only as current as the day it was built, and a near miss looks like a hit.',
     watch: 'The index is close. It often lands near the right passage without landing on it, and the answer is a blend of what it found and what it remembered. The similarity scores are right there.',
     run: runVector
-  },
-  {
-    id: 'end',
-    title: 'To end on',
-    sub: 'Five answers to one question. Now the question behind them.',
-    discussion: true
   }
 ];
 
@@ -125,13 +119,12 @@ function resetState() {
 function buildMethodPicker() {
   const select = $('method');
   select.textContent = '';
-  WAYS.forEach((w, i) => select.appendChild(el('option', { value: String(i), text: w.discussion ? w.title : `${i + 1}. ${w.title}` })));
+  WAYS.forEach((w, i) => select.appendChild(el('option', { value: String(i), text: `${i + 1}. ${w.title}` })));
   select.addEventListener('change', () => show(Number(select.value), true));
 }
 
 function paintSteps() {
   $('method').value = String(current);
-  $('method').classList.toggle('is-end', !!WAYS[current].discussion);
 }
 
 // Show way i. With run=true, run it if it has not run for this question yet.
@@ -141,8 +134,8 @@ function show(i, run) {
   paintSteps();
   render(w);
   $('prev').disabled = current === 0;
-  $('rerun').hidden = !!w.discussion;
-  if (run && !w.discussion && question && !state[w.id].ran) runWay(w);
+  $('next').textContent = current === WAYS.length - 1 ? 'Discussion \u2192' : 'Next \u2192';
+  if (run && question && !state[w.id].ran) runWay(w);
 }
 
 function render(w) {
@@ -151,18 +144,10 @@ function render(w) {
   $('way-num').textContent = String(current + 1);
   $('way-title').textContent = w.title;
   $('way-sub').textContent = w.sub;
-  $('way-body').hidden = !!w.discussion;
-  $('way-end').hidden = !w.discussion;
-  if (w.discussion) return;
   $('way-benefit').textContent = w.benefit;
   $('way-cost').textContent = w.cost;
   $('way-watch').textContent = w.watch;
   $('paste-box').hidden = w.id !== 'paste';
-  if (w.id === 'paste') {
-    const n = pastedText().length;
-    $('paste-summary').textContent = n ? `${n.toLocaleString()} characters pasted.` : 'Nothing pasted yet.';
-    $('paste-open').textContent = n ? 'Edit' : 'Paste context';
-  }
   const st = state[w.id];
   $('room-answer').hidden = !ownAnswer;
   $('room-answer').textContent = ownAnswer ? `Your answer first: ${ownAnswer}` : '';
@@ -243,11 +228,15 @@ async function fillPaste(date) {
     let text = first.text || '';
     let pin = first.pinpoint || first.citation || '2 CFR 200.414';
     if (first.truncated && Array.isArray(first.outline)) {
-      const line = first.outline.find(l => /\(f\)/.test(String(l))) || first.outline[0];
+      // In older text the outline stops at (c), and that last block runs on through (f).
+      const listed = first.outline.find(l => /\(f\)/.test(String(l)));
+      const line = listed || first.outline[first.outline.length - 1];
       const offset = parseInt(String(line).split(':')[0], 10);
       const chunk = await callMCPTool(ecfr.ECFR_MCP_URL, 'ecfr_get_regulation', Object.assign({ offset }, args));
       text = chunk.text || text;
       pin = chunk.pinpoint || pin;
+      const inside = !listed && text.match(/(?:^|\n)\s*(\(f\)\s[\s\S]*?)(?=\n\s*\(g\)\s|$)/);
+      if (inside) { text = inside[1]; pin = '2 CFR 200.414(f)'; }
     }
     box.value = `${pin}, eCFR text in force ${first.date || date || 'today'}:\n\n${text.trim()}`;
   } catch (e) {
@@ -255,16 +244,8 @@ async function fillPaste(date) {
   }
 }
 
-function askWithPaste() {
-  closeModal('paste-modal');
-  state.paste.ran = false;
-  if (!question) { ask(); return; }
-  show(WAYS.findIndex(w => w.id === 'paste'), true);
-}
-
 function wirePaste() {
-  $('paste-run').addEventListener('click', askWithPaste);
-  $('paste-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) askWithPaste(); });
+  $('paste-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) ask(); });
   $('paste-fill-current').addEventListener('click', () => fillPaste(null));
   $('paste-fill-old').addEventListener('click', () => fillPaste('2023-10-01'));
   $('paste-clear').addEventListener('click', () => { $('paste-text').value = ''; });
@@ -434,7 +415,7 @@ function ask() {
   ownAnswer = $('your-answer').value.trim();
   $('question').value = q;
   resetState();
-  show(WAYS[current].discussion ? 0 : current, true);
+  show(current, true);
   $('way').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -562,6 +543,10 @@ function init() {
   $('question').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
   $('your-answer').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
   $('prev').addEventListener('click', () => show(current - 1, true));
+  $('next').addEventListener('click', () => {
+    if (current === WAYS.length - 1) openModal('discussion-modal');
+    else show(current + 1, true);
+  });
   $('rerun').addEventListener('click', () => { state[WAYS[current].id].ran = false; show(current, true); });
   // Arrow keys step through the ways when the focus is not in a text field.
   document.addEventListener('keydown', e => {

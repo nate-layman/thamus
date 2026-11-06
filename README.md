@@ -97,7 +97,7 @@ Ask the same question each way and look for five things.
 - **The regulation, read live, shows its work.** The search words, the section it read, and the paragraph it answered from are all visible. That trail is what an auditor would ask for, and it is what memory can never provide.
 - **The index is close.** Retrieval over a vector index often lands near the right passage without landing on it, and the answer is a blend of what it found and what it remembered. The similarity scores are right there.
 
-Good questions to try are the ones whose answers changed in the 2024 revision of the Uniform Guidance: the de minimis rate, the equipment capitalization threshold, and the amount of each subaward that counts toward modified total direct costs. Enter a question once and step through the ways with Next.
+Good questions to try are the ones whose answers changed in the 2024 revision of the Uniform Guidance: the de minimis rate, the equipment capitalization threshold, and the amount of each subaward that counts toward modified total direct costs. Enter a question once and step through the ways.
 
 ## To end on
 
