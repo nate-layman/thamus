@@ -303,8 +303,10 @@ a { color: inherit; }
 .api-key-status { font-size: 0.82rem; margin-top: 0.4rem; color: var(--muted); }
 .api-key-status.ok { color: var(--green); font-weight: 600; }
 .api-key-status.error { color: var(--red, #b3261e); font-weight: 600; }
+.fine { margin: 0.6rem 0; }
 .fine summary { cursor: pointer; color: #7a5a00; font-weight: 700; font-size: 0.9rem; }
 .fine ul { padding-left: 1.2rem; margin: 0.5rem 0; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.3rem; color: #333; }
+.fine p, .fine ol { margin: 0.5rem 0; font-size: 0.85rem; color: #333; }
 .modal-close-btn {
   display: inline-block; margin-top: 0.8rem; padding: 0.5rem 1.5rem;
   border: 2px solid var(--gold); border-radius: 8px;

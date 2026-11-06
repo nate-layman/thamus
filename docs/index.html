@@ -123,23 +123,30 @@
           </div>
           <div class="api-key-status" id="api-key-status"></div>
         </div>
-        <p><strong>Don&rsquo;t have one?</strong> Get a free Gemini key. Gemini works well here because its keys are free and it has an embedding model, which the vector database needs.</p>
-        <ol>
-          <li>Go to <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a> and sign in with a Google account.</li>
-          <li>On a first visit, a key is created for you. Otherwise, click <strong>Create API Key</strong> and choose a project with no billing account.</li>
-          <li>Copy the key and paste it here.</li>
-        </ol>
-        <p>Free keys need no credit card, but they&rsquo;re limited: 15 model requests a minute when we last checked, plus a daily cap of over 100, and one question can use several. Google may also use what you type to improve its products, and its reviewers may read it, so don&rsquo;t enter anything sensitive.</p>
-        <p>An OpenAI (ChatGPT) API key also works, but it isn&rsquo;t free: each question is billed to the account that owns the key, and a ChatGPT subscription doesn&rsquo;t include one.</p>
-        <p>The vector database is quick with either one. The regulation&rsquo;s embeddings are already computed for each, so only your question needs embedding, and your browser downloads just the set for your key.</p>
-        <p>Want us to try adding another model? <a href="https://github.com/nate-layman/thamus/issues" target="_blank" rel="noopener">Raise an issue on GitHub</a>.</p>
+        <details class="fine">
+          <summary>Don&rsquo;t have one? Get a free Gemini key</summary>
+          <p>Gemini works well here because its keys are free and it has an embedding model, which the vector database needs.</p>
+          <ol>
+            <li>Go to <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a> and sign in with a Google account.</li>
+            <li>On a first visit, a key is created for you. Otherwise, click <strong>Create API Key</strong> and choose a project with no billing account.</li>
+            <li>Copy the key and paste it here.</li>
+          </ol>
+          <p>Free keys need no credit card, but they&rsquo;re limited: 15 model requests a minute when we last checked, plus a daily cap of over 100, and one question can use several. Google may also use what you type to improve its products, and its reviewers may read it, so don&rsquo;t enter anything sensitive.</p>
+        </details>
+        <details class="fine">
+          <summary>Using another model</summary>
+          <p>An OpenAI (ChatGPT) API key also works, but it isn&rsquo;t free: each question is billed to the account that owns the key, and a ChatGPT subscription doesn&rsquo;t include one.</p>
+          <p>Want us to try adding another model? <a href="https://github.com/nate-layman/thamus/issues" target="_blank" rel="noopener">Raise an issue on GitHub</a>.</p>
+        </details>
         <details class="fine">
           <summary>How the key is handled</summary>
           <ul>
             <li><strong>Tab-scoped.</strong> The key is held in sessionStorage, which belongs to this browser tab. It clears when the tab closes and is never written to disk.</li>
             <li><strong>Static site.</strong> This page is served as files from GitHub Pages. No server here stores or sees your key.</li>
             <li><strong>Sent only to the model&rsquo;s gateway.</strong> A key starting with <code>mr2_</code> goes to the University of Idaho&rsquo;s MindRouter through the AI4RA lakehouse proxy. A key starting with <code>sk-</code> goes to OpenAI. Any other key is treated as a Google Gemini key and goes to Google. The same key embeds your question for the vector database. Fetching the regulation and running the web search use no key.</li>
-            <li><strong>URL stripped.</strong> A key that arrives as <code>?key=</code> is read once and removed from the address bar.</li>          </ul>
+            <li><strong>URL stripped.</strong> A key that arrives as <code>?key=</code> is read once and removed from the address bar.</li>
+            <li><strong>Small download.</strong> The regulation&rsquo;s embeddings are already computed for Gemini and OpenAI, so the vector database is quick with either one. Only your question needs embedding, and your browser downloads just the set for your key.</li>
+          </ul>
         </details>
         <button class="modal-close-btn" data-close="key-modal">Done</button>
       </div>
