@@ -8,7 +8,7 @@ Ask a research compliance question five ways, one at a time: from the model's me
 
 Part of [AI4RA](https://ai4ra.uidaho.edu) at the University of Idaho.
 
-**Discuss:** tell us what you think on the [AI4RA community on Groups.io](https://groups.ai4ra.uidaho.edu/g/main). Join the [#AILiteracy](https://groups.ai4ra.uidaho.edu/g/main/search?q=%23AILiteracy&ct=1) conversation, or start a new topic with #AILiteracy in the subject line.
+**Discuss, or report a problem:** tell us what you think, or what went wrong, on the [AI4RA community on Groups.io](https://groups.ai4ra.uidaho.edu/g/main). Join the [#AILiteracy](https://groups.ai4ra.uidaho.edu/g/main/search?q=%23AILiteracy&ct=1) conversation, or start a new topic with #AILiteracy in the subject line.
 
 ## The story
 
