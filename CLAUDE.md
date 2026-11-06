@@ -8,7 +8,7 @@ A static teaching page for the AI4RA workshops at the University of Idaho. One r
 
 - `docs/` is the GitHub Pages source. Vanilla ES modules, no build step, no framework. The shell (header, key modal, sessionStorage key, `?key=`) mirrors Data Crawler Carl and Promptulus.
   - `js/app.js` the five columns and their prompts
-  - `js/api.js` the model bridge: `mr2_` keys go to MindRouter through the lakehouse proxy, other keys to Gemini
+  - `js/api.js` the model bridge: `mr2_` keys go to MindRouter through the lakehouse proxy, `sk-` keys to OpenAI, other keys to Gemini
   - `js/mcp.js`, `js/ecfr-lookup.js`, `js/web-search.js` calls to the AI4RA MCP server (no key, any origin)
   - `js/embeddings.js` the embedding model, size and query and passage text for each backend; the page and the build both import it
   - `js/vector-index.js` loads `docs/index/`, has the backend embed the question, and ranks the passages in the browser
@@ -39,4 +39,4 @@ A plain static server works for everything except the model calls.
 cd scripts && npm run build          # or: npm run embed -- gemini, to re-embed one backend
 ```
 
-Fetches the current 2 CFR 200 from the eCFR, cuts it into passages, has each backend whose key is set embed them, and writes `docs/index/`. Keys come from the environment or from `.env` at the root (`MINDROUTER_API_KEY`, `GEMINI_API_KEY`), which is gitignored; never commit it. Commit the result.
+Fetches the current 2 CFR 200 from the eCFR, cuts it into passages, has each backend whose key is set embed them, and writes `docs/index/`. Keys come from the environment or from `.env` at the root (`MINDROUTER_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY`), which is gitignored; never commit it. Commit the result.

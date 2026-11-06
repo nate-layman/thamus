@@ -2,8 +2,8 @@
 // Every way asks the same model with its default settings. Only what it is handed differs:
 // nothing, a passage you pasted, search-engine snippets, the nearest passages from a
 // vector index of 2 CFR 200, or the one eCFR paragraph a live lookup read.
-import { getKey, setKey, readKeyFromURL, wasKeyLoadedFromURL } from './key-manager.js';
-import { initAPI, hasAPIKey, callModel, backendName, currentModel, isMindRouterKey, embeddingBackend, embedQuery } from './api.js';
+import { setKey, readKeyFromURL, wasKeyLoadedFromURL } from './key-manager.js';
+import { initAPI, hasAPIKey, callModel, backendName, currentModel, embeddingBackend, embedQuery } from './api.js';
 import { webSearch, formatResults } from './web-search.js';
 import { retrieve, warm, indexInfo, formatPassages } from './vector-index.js';
 import { BACKENDS } from './embeddings.js';
@@ -30,7 +30,7 @@ const WAYS = [
     sub: 'The model answers from memory: its training and nothing else.',
     benefit: 'Instant and free. No infrastructure, no source to keep ready.',
     cost: 'Frozen on a date, and it cannot tell you so.',
-    watch: 'Listen to the confidence. It will sound exactly as sure here as it does with the regulation in hand. Confidence is not evidence.',
+    watch: 'Listen to the confidence. It will sound exactly as sure here as it does with the regulation in hand. Confidence is not evidence. Whether it is right is hard to predict: that depends on when the guidance last changed, when the model was trained, and how much of its training data used the old value rather than the new.',
     run: runMemory
   },
   {
@@ -505,12 +505,12 @@ function updateKeyStatus() {
     status.className = 'api-key-status ok';
     input.value = '';
     input.placeholder = '•••••••• (saved)';
-    label.textContent = isMindRouterKey(getKey()) ? 'MindRouter key' : 'Gemini key';
+    label.textContent = `${backendName().replace('Google ', '')} key`;
   } else {
     dot.classList.remove('connected');
     status.textContent = '';
     status.className = 'api-key-status';
-    input.placeholder = 'mr2_… for MindRouter, or a Gemini key';
+    input.placeholder = 'A Gemini, OpenAI or MindRouter key';
     label.textContent = 'API key';
   }
 }

@@ -17,8 +17,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const indexDir = join(here, '..', 'docs', 'index');
 const chunksPath = join(indexDir, 'chunks.json');
 
-const KEYS = { mindrouter: process.env.MINDROUTER_API_KEY, gemini: process.env.GEMINI_API_KEY };
-const ENV_NAMES = { mindrouter: 'MINDROUTER_API_KEY', gemini: 'GEMINI_API_KEY' };
+const KEYS = { mindrouter: process.env.MINDROUTER_API_KEY, gemini: process.env.GEMINI_API_KEY, openai: process.env.OPENAI_API_KEY };
+const ENV_NAMES = { mindrouter: 'MINDROUTER_API_KEY', gemini: 'GEMINI_API_KEY', openai: 'OPENAI_API_KEY' };
 
 const named = process.argv.slice(2);
 for (const b of named) if (!BACKENDS[b]) throw new Error(`Unknown backend "${b}". Use ${Object.keys(BACKENDS).join(' or ')}.`);

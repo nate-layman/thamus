@@ -27,11 +27,23 @@ export const BACKENDS = {
     batch: 100,
     query: q => `task: question answering | query: ${q}`,
     passage: c => `title: ${c.heading}${subLabel(c)} | text: ${c.text}`
+  },
+  // OpenAI cuts the vector to size itself. The model takes no task prefix, so the
+  // question goes as it was asked.
+  openai: {
+    label: 'OpenAI',
+    model: 'text-embedding-3-small',
+    dims: 768,
+    file: 'embeddings-openai.bin',
+    batch: 100,
+    query: q => q,
+    passage: c => `${c.heading}${subLabel(c)}\n${c.text}`
   }
 };
 
 export const MINDROUTER_PUBLIC_URL = 'https://nlayman-external.insight.uidaho.edu/v1';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+const OPENAI_URL = 'https://api.openai.com/v1';
 
 // A paragraph that says only "(f) De minimis rate..." still knows its section.
 function subLabel(c) {
@@ -41,17 +53,24 @@ function subLabel(c) {
 /**
  * Embed texts with a backend. Returns one Float32Array per text, cut to the backend's
  * size and L2-normalized, so a dot product is the cosine similarity.
- * @param {'mindrouter'|'gemini'} backend
- * @param {string} key       the MindRouter or Gemini key
+ * @param {'mindrouter'|'gemini'|'openai'} backend
+ * @param {string} key       the key for that backend
  * @param {string[]} texts   already wrapped with the backend's query() or passage()
  * @param {{baseUrl?: string, retries?: number}} [options]
  */
 export async function embedTexts(backend, key, texts, options = {}) {
   const spec = BACKENDS[backend];
-  const raw = backend === 'mindrouter'
-    ? await embedMindRouter(spec, key, texts, options)
-    : await embedGemini(spec, key, texts, options);
+  const embed = { mindrouter: embedMindRouter, gemini: embedGemini, openai: embedOpenAI }[backend];
+  const raw = await embed(spec, key, texts, options);
   return raw.map(v => normalize(v, spec.dims));
+}
+
+async function embedOpenAI(spec, key, texts, options) {
+  const data = await postJSON(`${OPENAI_URL}/embeddings`, { Authorization: `Bearer ${key}` },
+    { model: spec.model, input: texts, dimensions: spec.dims }, 'OpenAI', options.retries);
+  const rows = (data.data || []).slice().sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
+  if (rows.length !== texts.length) throw new Error(`OpenAI returned ${rows.length} embeddings for ${texts.length} texts.`);
+  return rows.map(r => r.embedding);
 }
 
 async function embedMindRouter(spec, key, texts, options) {
@@ -85,19 +104,39 @@ async function postJSON(url, headers, body, who, retries = 0) {
     if (response.ok) return response.json();
     let err = null;
     try { err = await response.json(); } catch { /* body was not JSON */ }
-    if (response.status === 429 && isDailyCap(err)) {
-      throw new Error(`This ${who} key's project has used its free embedding requests for today (${dailyLimit(err) || 'the daily limit'}). Try a key from another project, or a MindRouter key.`);
-    }
+    if (response.status === 429 && (isDailyCap(err) || isOutOfCredits(err))) throw new Error(limitMessage(429, err, who, 'embedding requests'));
     if ((response.status === 429 || response.status >= 500) && attempt < retries) {
       const after = Number(response.headers.get('retry-after')) || retryDelay(err);
       await new Promise(r => setTimeout(r, Math.min(after > 0 ? after : 2 ** attempt * 5, 60) * 1000));
       continue;
     }
+    const limit = limitMessage(response.status, err, who, 'embedding requests');
+    if (limit) throw new Error(limit);
     const detail = err ? (err.detail || err.error?.message || err.error || '') : '';
     const said = detail ? ': ' + (typeof detail === 'string' ? detail : JSON.stringify(detail)) : '';
     if (response.status === 401 || response.status === 403) throw new Error(`${who} rejected the key for embeddings (${response.status})${said}`);
     throw new Error(`${who} embedding error ${response.status}${said}`);
   }
+}
+
+// What to do about a limit or a busy backend, in words, or '' when the status is neither.
+// Waiting clears a per-minute limit but not a daily cap or an empty balance, so each
+// says something different.
+export function limitMessage(status, err, who, what = 'requests') {
+  if (status === 429 && isOutOfCredits(err)) {
+    return `This ${who} key's account has no credits left, so waiting will not help. Add credits to the account or use a different key.`;
+  }
+  if (status === 429 && isDailyCap(err)) {
+    return `This ${who} key's project has used its free ${what} for today (${dailyLimit(err) || 'the daily limit'}). Try a key from another project, or a MindRouter key.`;
+  }
+  if (status === 429) return `${who} is limiting how often this key can ask. Wait a minute, then try again.`;
+  if (status === 503) return `${who} is overloaded right now. That is on its side, not your key. Wait a minute, then try again.`;
+  return '';
+}
+
+// OpenAI answers 429 for an empty balance as well as for a rate limit.
+function isOutOfCredits(err) {
+  return err?.error?.type === 'insufficient_quota';
 }
 
 // Gemini names the quota it refused under: a per-day id is the free tier's daily cap.
