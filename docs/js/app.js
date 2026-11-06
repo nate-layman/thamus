@@ -3,7 +3,7 @@
 // nothing, a passage you pasted, search-engine snippets, the nearest passages from a
 // vector index of 2 CFR 200, or the one eCFR paragraph a live lookup read.
 import { setKey, readKeyFromURL, wasKeyLoadedFromURL } from './key-manager.js';
-import { initAPI, hasAPIKey, callModel, backendName, currentModel, embeddingBackend, embedQuery } from './api.js';
+import { initAPI, hasAPIKey, callModel, backendName, currentModel, embeddingBackend, embedQuery, isAnthropicKey } from './api.js';
 import { webSearch, formatResults } from './web-search.js';
 import { retrieve, warm, indexInfo, formatPassages } from './vector-index.js';
 import { BACKENDS } from './embeddings.js';
@@ -515,10 +515,21 @@ function updateKeyStatus() {
   }
 }
 
+function sayKeyNotSupported() {
+  const status = $('api-key-status');
+  status.textContent = 'Claude keys aren’t supported yet, so this one wasn’t saved or sent anywhere. Use a Gemini, OpenAI or MindRouter key.';
+  status.className = 'api-key-status error';
+}
+
 function wireKey() {
   $('api-key-save').addEventListener('click', () => {
     const val = $('api-key-input').value.trim();
     if (!val) return;
+    if (isAnthropicKey(val)) {
+      $('api-key-input').value = '';
+      sayKeyNotSupported();
+      return;
+    }
     setKey(val);
     initAPI(val);
     updateKeyStatus();
@@ -565,9 +576,12 @@ function init() {
     if (e.key === 'ArrowLeft') show(current - 1, true);
   });
 
-  const key = readKeyFromURL();
+  let key = readKeyFromURL();
+  const refused = isAnthropicKey(key);
+  if (refused) { setKey(''); key = ''; }
   if (key) initAPI(key);
   updateKeyStatus();
+  if (refused) sayKeyNotSupported();
   show(0, false);
   if (key && wasKeyLoadedFromURL()) {
     const toast = $('toast');

@@ -1,5 +1,5 @@
-// Live eCFR lookup through the AI4RA MCP server's ecfr server, adapted from the
-// NCURA workshop deck. It follows the server's own instructions: ecfr_search limited
+// Live eCFR lookup through the AI4RA MCP server's ecfr server, adapted from an
+// earlier AI4RA teaching site. It follows the server's own instructions: ecfr_search limited
 // to 2 CFR 200, then ecfr_get_regulation on the top hit. A section over 6,000
 // characters comes back as an outline of its lettered paragraphs, and only the one
 // paragraph that bears on the question is read, so each lookup is two or three small

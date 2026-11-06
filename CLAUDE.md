@@ -2,7 +2,7 @@
 
 ## Project
 
-A static teaching page for the AI4RA workshops at the University of Idaho. One research compliance question is answered five ways, by the same model: from memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from the regulation itself, read live over MCP. The framing is Plato's Thamus; the README is the essay and the page is the demonstration. Authors: Nathan Layman and Bert Baumgaertner.
+A static teaching page from AI4RA at the University of Idaho. One research compliance question is answered five ways, by the same model: from memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from the regulation itself, read live over MCP. The framing is Plato's Thamus; the README is the essay and the page is the demonstration. Authors: Nathan Layman and Bert Baumgaertner.
 
 ## Layout
 
@@ -20,9 +20,9 @@ A static teaching page for the AI4RA workshops at the University of Idaho. One r
 
 - Every column asks the same model the same way. Only what it is handed differs. Keep it that way; the comparison is the lesson.
 - The query vector and the passage vectors must come from the same model, size and wrapping text. All three live in `docs/js/embeddings.js`; change one, rebuild that backend's vectors.
-- Never commit a key. The workshop key travels on the QR code's URL and lives in sessionStorage.
+- Never commit a key. A key can arrive on a `?key=` link and lives in sessionStorage.
 - No em dashes in prose. Use commas, periods, or "and".
-- Sibling repos (data-crawler-carl, promptulus, ai4ra-mcp, NCURARegionalWorkshop2026) are read-only context.
+- Sibling repos (data-crawler-carl, promptulus, ai4ra-mcp) are read-only context.
 - Infrastructure stays out of git. Proxy and host configuration (Caddy snippets, allowlists, anything about the lakehouse VM) goes under `deploy/`, which is ignored, or stays on the host. The README may say what an origin needs, never the config itself.
 
 ## Local preview

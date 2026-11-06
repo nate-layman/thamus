@@ -32,8 +32,8 @@ Sources and third-party software
 The page's shell (header, key handling, modals) and the LLM bridge are
 adapted from Data Crawler Carl (ui-insight/data-crawler-carl) and
 Promptulus (AI4RA/promptulus), both by the same authors under Apache-2.0.
-The eCFR lookup is adapted from the NCURA Region VI/VII 2026 workshop site
-(ui-insight/NCURARegionalWorkshop2026), Apache-2.0.
+The eCFR lookup is adapted from an earlier AI4RA teaching site by the same
+authors, Apache-2.0.
 
 docs/index/ holds passages of 2 CFR Part 200 fetched from the eCFR
 (https://www.ecfr.gov), a work of the United States Government in the
@@ -66,6 +66,5 @@ Four of the method icons in the How it works dialog are from Lucide
   ISC License - https://github.com/lucide-icons/lucide/blob/main/LICENSE
 
 docs/img/crowd-of-amateurs.png, the crowd illustration for "No context",
-is carried over from the NCURA Region VI/VII 2026 workshop site by the same
-authors (ui-insight/NCURARegionalWorkshop2026), where it illustrates the
-same idea: a language model as a crowd of well-read non-experts.
+is carried over from an earlier AI4RA teaching site by the same authors,
+where it illustrates the same idea: a language model as a crowd of well-read non-experts.

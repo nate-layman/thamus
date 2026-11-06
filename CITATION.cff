@@ -14,4 +14,4 @@ authors:
     given-names: Bert
     affiliation: "University of Idaho"
 abstract: >-
-  Ask a research compliance question five ways in the browser: from a language model's memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from a live eCFR lookup over MCP. A teaching page on what a model remembers and what it must look up, built for the AI4RA workshops.
+  Ask a research compliance question five ways in the browser: from a language model's memory, from pasted text, from a web search, from a vector database of 2 CFR 200, and from a live eCFR lookup over MCP. A teaching page on what a model remembers and what it must look up.

@@ -36,8 +36,14 @@ export function isMindRouterKey(key) {
   return typeof key === 'string' && key.trim().startsWith('mr2_');
 }
 
+// Anthropic's keys also start with "sk-". There is no Claude backend yet, and without
+// this check such a key would go to OpenAI or Google. The page refuses it instead.
+export function isAnthropicKey(key) {
+  return typeof key === 'string' && key.trim().startsWith('sk-ant-');
+}
+
 export function isOpenAIKey(key) {
-  return typeof key === 'string' && key.trim().startsWith('sk-') && !key.trim().startsWith('sk-ant-');
+  return typeof key === 'string' && key.trim().startsWith('sk-') && !isAnthropicKey(key);
 }
 
 export function backendName(key) {
