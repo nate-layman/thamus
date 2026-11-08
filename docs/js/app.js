@@ -244,8 +244,16 @@ async function fillPaste(date) {
   }
 }
 
+// Run way 2 again with whatever is in the box now, leaving the other ways alone.
+function askWithPaste() {
+  if (!question) { ask(); return; }
+  state.paste.ran = false;
+  show(current, true);
+}
+
 function wirePaste() {
-  $('paste-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) ask(); });
+  $('paste-run').addEventListener('click', askWithPaste);
+  $('paste-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); askWithPaste(); } });
   $('paste-fill-current').addEventListener('click', () => fillPaste(null));
   $('paste-fill-old').addEventListener('click', () => fillPaste('2023-10-01'));
   $('paste-clear').addEventListener('click', () => { $('paste-text').value = ''; });
@@ -268,7 +276,7 @@ async function runMemory(question) {
 async function runPaste(question) {
   const pasted = pastedText();
   if (!pasted) {
-    setAnswer('paste', 'Nothing pasted. Add a passage and ask with it.', 'muted');
+    setAnswer('paste', 'Nothing pasted yet. Paste a passage above, then press Ask with this text.', 'muted');
     setTrail('paste', el('p', { class: 'trail-note', text: 'Nothing. This way only works when you have done the reading.' }));
     return;
   }
@@ -280,7 +288,6 @@ async function runPaste(question) {
   setAnswer('paste', answer);
   setTrail('paste', [
     el('p', { class: 'trail-note', text: `${pasted.length.toLocaleString()} characters you pasted. The model does not know where they came from, how old they are, or whether they are the governing text. You do, or you should.` }),
-    expandable('The pasted text', pasted),
     expandable('System prompt', system)
   ]);
 }
